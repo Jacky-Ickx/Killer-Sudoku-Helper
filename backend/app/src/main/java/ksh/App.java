@@ -5,7 +5,7 @@
  */
 package ksh;
 
-public class App {
+class App {
     public String getGreeting() {
         return "Hello World!";
     }
