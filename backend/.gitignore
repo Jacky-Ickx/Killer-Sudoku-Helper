@@ -4,8 +4,10 @@
 # Ignore Gradle build output directory
 build
 
-# vscode stuff
-.vscode
+# local stuff
+.settings
+.classpath
+.project
 
 # java stuff
 app/bin
