@@ -27,6 +27,8 @@ public class Cell {
         this.resetPossibleValues();
     }
 
+    // TODO: Test value ranges
+
     /**
      * gets all possible values of the cell
      * 
