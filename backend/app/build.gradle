@@ -12,6 +12,12 @@ plugins {
     id 'java'
 }
 
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
 jar {
     manifest {
         attributes(
@@ -36,6 +42,16 @@ dependencies {
 application {
     // Define the main class for the application.
     mainClass = 'ksh.App'
+}
+
+tasks.withType(JavaCompile) {
+    options.release = 17
+}
+
+tasks.named('run') {
+    javaLauncher = javaToolchains.launcherFor {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
 }
 
 tasks.named('test') {
