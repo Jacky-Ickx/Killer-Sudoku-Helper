@@ -46,7 +46,7 @@ public class KillerSudoku {
     public KillerSudoku(final int[][] startingGrid, final Cage[] cages) throws IllegalArgumentException {
         this(cages);
 
-        validateGridDimensions(startingGrid);
+        validateIntGridDimensions(startingGrid);
 
         this.startingGrid = startingGrid;
 
@@ -84,7 +84,7 @@ public class KillerSudoku {
     public void setSolvedGrid(final int[][] solvedGrid) throws IllegalArgumentException {
         if (this.solvedGrid != null) return;
 
-        validateGridDimensions(solvedGrid);
+        validateIntGridDimensions(solvedGrid);
         // TODO: further validation
         this.solvedGrid = solvedGrid;
     }
@@ -228,7 +228,12 @@ public class KillerSudoku {
      * @param grid killer sudoku grid to check
      * @throws IllegalArgumentException when grid is not of size 9x9 or null
      */
-    public static void validateGridDimensions(final int[][] grid) throws IllegalArgumentException {
+    public static void validateIntGridDimensions(final int[][] grid) throws IllegalArgumentException {
+        if (grid == null) {
+            validateGridDimensions(null);
+            return;
+        }
+
         final Integer[][] convertedGrid = new Integer[grid.length][grid[0].length];
         for (int y = 0; y < grid.length; y++) {
             for (int x = 0; x < Math.min(grid[0].length, grid[y].length); x++) {
