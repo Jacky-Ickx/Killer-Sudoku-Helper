@@ -2,9 +2,7 @@ package ksh;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
-import java.util.stream.IntStream;
 
 // IMPORTANT: empty cells in grid are currently assumed to be 0 (by Cage::checkSum)
 // TODO: logging
@@ -25,11 +23,17 @@ public class KillerSudoku {
      * Basic constructor
      * 
      * @param cages array of cages of the killer sudoku
-     * @throws IllegalArgumentException when list of cages is obviously not valid
+     * @throws IllegalArgumentException when list of cages is obviously not valid or null
      */
-    private KillerSudoku(final Cage[] cages) throws IllegalArgumentException {
+    public KillerSudoku(final Cage[] cages) throws IllegalArgumentException {
         Cage.validateCageList(cages);
         this.cages = cages;
+
+        for (int y = 0; y < 9; y++) {
+            for (int x = 0; x < 9; x++) {
+                this.grid[y][x] = new Cell();
+            }
+        }
     }
 
     /**
@@ -42,8 +46,7 @@ public class KillerSudoku {
     public KillerSudoku(final int[][] startingGrid, final Cage[] cages) throws IllegalArgumentException {
         this(cages);
 
-        final Object[] convertedStartingGrid = Arrays.stream(startingGrid).map(row -> IntStream.of(row).boxed().toArray()).toArray();
-        validateGridDimensions(Arrays.copyOf(convertedStartingGrid, convertedStartingGrid.length, Integer[][].class));
+        validateGridDimensions(startingGrid);
 
         this.startingGrid = startingGrid;
 
@@ -81,9 +84,8 @@ public class KillerSudoku {
     public void setSolvedGrid(final int[][] solvedGrid) throws IllegalArgumentException {
         if (this.solvedGrid != null) return;
 
-        final Object[] convertedSolvedGrid = Arrays.stream(solvedGrid).map(row -> IntStream.of(row).boxed().toArray()).toArray();
-        validateGridDimensions(Arrays.copyOf(convertedSolvedGrid, convertedSolvedGrid.length, Integer[][].class));
-
+        validateGridDimensions(solvedGrid);
+        // TODO: further validation
         this.solvedGrid = solvedGrid;
     }
 
@@ -200,23 +202,30 @@ public class KillerSudoku {
      * @throws IllegalArgumentException when grid is not of size 9x9 or null
      */
     public static <T> void validateGridDimensions(final T[][] grid) throws IllegalArgumentException {
-        try {
-            // check grid size
-            if (grid.length != 9) {
-                final String errorMessage = MessageFormat.format("the given grid must be of size 9x9; got grid with a vertical size of {0}", grid.length);
+        if (grid == null) throw new IllegalArgumentException("grid can't be null");
+
+        // check grid size
+        if (grid.length != 9) {
+            final String errorMessage = MessageFormat.format("the given grid must be of size 9x9; got grid with a vertical size of {0}", grid.length);
+            throw new IllegalArgumentException(errorMessage);
+        }
+        for (final var row : grid) {
+            if (row.length != 9) {
+                final String errorMessage = MessageFormat.format("the given grid must be of size 9x9; got a row with a horizontal size of {0}", row.length);
                 throw new IllegalArgumentException(errorMessage);
             }
-            for (final var row : grid) {
-                if (row.length != 9) {
-                    final String errorMessage = MessageFormat.format("the given grid must be of size 9x9; got a row with a horizontal size of {0}", row.length);
-                    throw new IllegalArgumentException(errorMessage);
-                }
-            }
+        }
 
-            // TODO: logging (debug: sucessfully validated)
+        // TODO: logging (debug: sucessfully validated)
+    }
+
+    public static void validateGridDimensions(final int[][] grid) throws IllegalArgumentException {
+        final Integer[][] convertedGrid = new Integer[grid.length][grid[0].length];
+        for (int y = 0; y < grid.length; y++) {
+            for (int x = 0; x < Math.min(grid[0].length, grid[y].length); x++) {
+                convertedGrid[y][x] = (Integer) grid[y][x];
+            }
         }
-        catch (final NullPointerException e) {
-            throw new IllegalArgumentException(e);
-        }
+        validateGridDimensions(convertedGrid);
     }
 }
