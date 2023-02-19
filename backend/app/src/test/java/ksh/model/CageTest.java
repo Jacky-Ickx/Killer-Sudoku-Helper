@@ -288,8 +288,8 @@ class CageTest {
                     cageList[5],
                     cageList[6],
                     cageList[7],
-                    new Cage(44, Arrays.copyOfRange(allPositions[8], 0, 7)),
-                    new Cage(2, Arrays.copyOfRange(allPositions[8], 8, 8))
+                    new Cage(44, Arrays.copyOfRange(allPositions[8], 0, 8)),
+                    new Cage(2, Arrays.copyOfRange(allPositions[8], 8, 9))
                 };
                 // @formatter:on
                 Cage.validateCageList(invalidSum);
@@ -306,7 +306,7 @@ class CageTest {
             @Override
             public void execute() throws Throwable {
                 final Cage[] invalidAmountOfCells = cageList.clone();
-                invalidAmountOfCells[8] = new Cage(44, Arrays.copyOfRange(allPositions[8], 0, 7));
+                invalidAmountOfCells[8] = new Cage(44, Arrays.copyOfRange(allPositions[8], 0, 8));
                 Cage.validateCageList(invalidAmountOfCells);
             }
         }, "invalid amount of cells in cages should throw an error");
