@@ -219,6 +219,15 @@ public class KillerSudoku {
         // TODO: logging (debug: sucessfully validated)
     }
 
+    /**
+     * Method used for input validation in other methods. <br>
+     * Checks, whether grid exists and is of size 9x9.
+     * 
+     * Wraps validateGridDimensions(final T[][] grid)
+     * 
+     * @param grid killer sudoku grid to check
+     * @throws IllegalArgumentException when grid is not of size 9x9 or null
+     */
     public static void validateGridDimensions(final int[][] grid) throws IllegalArgumentException {
         final Integer[][] convertedGrid = new Integer[grid.length][grid[0].length];
         for (int y = 0; y < grid.length; y++) {
