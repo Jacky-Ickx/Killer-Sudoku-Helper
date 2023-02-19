@@ -1,4 +1,4 @@
-package ksh;
+package ksh.model;
 
 import java.text.MessageFormat;
 import java.util.Arrays;

@@ -1,4 +1,4 @@
-package ksh;
+package ksh.model;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;

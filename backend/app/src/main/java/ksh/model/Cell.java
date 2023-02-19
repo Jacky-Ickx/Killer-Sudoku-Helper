@@ -1,4 +1,4 @@
-package ksh;
+package ksh.model;
 
 import java.util.ArrayList;
 import java.util.HashSet;
