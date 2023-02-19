@@ -113,9 +113,11 @@ public class Cage {
      * this validation does not guarantee validity, it just excludes obvious invalidity
      * 
      * @param cages list (array) of cages to check
-     * @throws IllegalArgumentException when list of cages is obviously not valid
+     * @throws IllegalArgumentException when list of cages is obviously not valid or null
      */
     public static void validateCageList(final Cage[] cages) throws IllegalArgumentException {
+        if (cages == null) throw new IllegalArgumentException("cages can't be null");
+
         final int cells = Arrays.stream(cages).mapToInt((cage) -> cage.getSize()).sum();
         if (cells != 81) {
             final String errorMessage = MessageFormat.format("all cages must span exactly 81 cells cumulatively; given cells span {0} cells", cells);
@@ -134,7 +136,9 @@ public class Cage {
         final int[][] grid = new int[9][9];
         final int[] row = new int[9];
         Arrays.fill(row, NOT_COVERED);
-        Arrays.fill(grid, row);
+        for (int y = 0; y < 9; y++) {
+            grid[y] = row.clone();
+        }
 
         for (final var cage : cages) {
             for (final var cell : cage.cells) {
