@@ -28,6 +28,8 @@ public class Cage {
     /** positions of cells that make up the cage */
     private final Position[] cells;
 
+    // TODO: add handling for possible combinations
+
     /**
      * Basic constructor
      * 
