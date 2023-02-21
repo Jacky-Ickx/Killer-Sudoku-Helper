@@ -1,5 +1,4 @@
 package ksh.solver;
 
-public class Step {
-
+public record Step() {
 }

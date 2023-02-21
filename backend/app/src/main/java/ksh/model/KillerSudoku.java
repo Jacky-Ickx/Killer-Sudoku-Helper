@@ -90,6 +90,23 @@ public class KillerSudoku {
     }
 
     /**
+     * checks whether the cell at a given position is either unsolved or solved correctly
+     * 
+     * @param x horizontal position of the cell
+     * @param y verticale position of the cell
+     * @return whether cell has no value or the correct value
+     * @throws IllegalStateException when the sudoku has not been solved yet
+     */
+    public boolean checkCell(final int x, final int y) throws IllegalStateException {
+        try {
+            return (this.getValue(x, y) == Cell.NO_VALUE || this.getValue(x, y) == this.solvedGrid[y][x]);
+        }
+        catch (final NullPointerException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
+    /**
      * gets all possible values of a given cell
      * 
      * @param x horizontal index of cell

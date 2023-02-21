@@ -5,11 +5,11 @@ import java.util.EnumMap;
 import ksh.model.Cage;
 import ksh.model.Cell;
 
-public final class Strategies {
-    enum Level {
-        EASY, BRUTEFORCE
-    }
+enum Level {
+    ERROR_DETECTION, EASY, ADVANCED, COMPLEX, BRUTEFORCE
+}
 
+public final class Strategies {
     public static final EnumMap<Level, Strategy[]> STRATEGIES = new EnumMap<>(Level.class);
 
     // @formatter:off
