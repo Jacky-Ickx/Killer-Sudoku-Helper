@@ -7,6 +7,16 @@ import java.text.MessageFormat;
  * {x: 8, y: 8} denotes the bottom right corner.
  */
 public class Position {
+    /** 9x9 array of Positions corresponding to indices of array */
+    public static Position[][] allPositions = new Position[9][9];
+    static {
+        for (int y = 0; y < 9; y++) {
+            for (int x = 0; x < 9; x++) {
+                allPositions[y][x] = new Position(x, y);
+            }
+        }
+    }
+
     /** horizontal position in range [0, 8] */
     public final int x;
     /** vertical position in range [0, 8] */
@@ -52,6 +62,12 @@ public class Position {
                 return true;
             }
         }
+        return false;
+    }
+
+    @Override
+    public boolean equals(final Object other) {
+        if (other != null && other instanceof final Position otherPosition) return (this.x == otherPosition.x && this.y == otherPosition.y);
         return false;
     }
 

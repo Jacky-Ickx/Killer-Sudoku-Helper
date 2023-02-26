@@ -24,7 +24,16 @@ public class Solver {
             }
 
             if (!errors.isEmpty()) {
-                return new Step();
+                // @formatter:off
+                return new Step("Error Detection",
+                                true,
+                                null,
+                                null,
+                                null, 
+                                (Position[]) errors.toArray(),
+                                null
+                );
+                // @formatter:on
             }
         }
         catch (final IllegalStateException e) {

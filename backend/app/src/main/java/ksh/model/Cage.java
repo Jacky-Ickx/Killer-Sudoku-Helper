@@ -23,6 +23,33 @@ public class Cage {
     };
     // @formatter:on
 
+    /** Cages representing normal Sudoku rules regarding rows */
+    public static final Cage[] rowCages = new Cage[9];
+    /** Cages representing normal Sudoku rules regarding columns */
+    public static final Cage[] columnCages = new Cage[9];
+    /** Cages representing normal Sudoku rules regarding nonets */
+    public static final Cage[] nonetCages = new Cage[9];
+
+    static { // init cages to represent normal sudoku rules
+        for (int y = 0; y < 9; y++) {
+            rowCages[y] = new Cage(45, Position.allPositions[y]);
+        }
+
+        final Position[][] nonets = new Position[9][9];
+        for (int x = 0; x < 9; x++) {
+            final Position[] column = new Position[9];
+            for (int y = 0; y < 9; y++) {
+                column[y] = Position.allPositions[y][x];
+                nonets[(3 * (y / 3)) + (x / 3)][(3 * (y % 3)) + (x % 3)] = Position.allPositions[y][x];
+            }
+            columnCages[x] = new Cage(45, column);
+        }
+
+        for (int i = 0; i < 9; i++) {
+            nonetCages[i] = new Cage(45, nonets[i]);
+        }
+    }
+
     /** target sum of cage */
     private final int sum;
     /** positions of cells that make up the cage */
@@ -45,7 +72,7 @@ public class Cage {
             throw new IllegalArgumentException(errorMessage);
         }
 
-        // check if sum is possible 
+        // check if sum is possible
         if (sum < possibleSums[cells.length - 1][0] || sum > possibleSums[cells.length - 1][1]) {
             final String errorMessage = MessageFormat.format("sum {0} not possible for {1}-cell cage", sum, cells.length);
             throw new IllegalArgumentException(errorMessage);
@@ -101,12 +128,46 @@ public class Cage {
     }
 
     /**
+     * check whether another cage is completely contained in this cage.
+     * 
+     * used to check, whether a cage is completely contained in a specific region.
+     * 
+     * @param other cage to check
+     * @return whether other is completely contained in this
+     */
+    public boolean containsCage(final Cage other) {
+        final var cellList = Arrays.asList(this.cells);
+        for (final var cell : other.cells) {
+            if (!cellList.contains(cell)) return false;
+        }
+        return true;
+    }
+
+    /**
      * get size of cage
      * 
      * @return amount of cells in cage
      */
     public int getSize() {
         return this.cells.length;
+    }
+
+    /**
+     * get target sum of cage
+     * 
+     * @return target sum of cage
+     */
+    public int getSum() {
+        return this.sum;
+    }
+
+    /**
+     * get covered cells of cage
+     * 
+     * @return covered positions
+     */
+    public Position[] getCells() {
+        return this.cells;
     }
 
     /**
