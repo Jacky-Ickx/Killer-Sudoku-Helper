@@ -1,8 +1,10 @@
 package ksh.model;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Set;
 
 /**
  * This class is used to handle the Cages of a Killer Sudoku.
@@ -55,6 +57,9 @@ public class Cage {
     /** positions of cells that make up the cage */
     private final Position[] cells;
 
+    private Set<Set<Integer>> possibleCombinations;
+    private final boolean setCombination;
+
     // TODO: add handling for possible combinations
 
     /**
@@ -88,6 +93,42 @@ public class Cage {
 
         this.sum = sum;
         this.cells = cells;
+        this.possibleCombinations = null;
+        this.setCombination = false;
+
+        this.setPossibilities();
+    }
+
+    private void setPossibilities() {
+        this.possibleCombinations = calculatePossiblities(this.cells.length, this.sum, new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9)));
+    }
+
+    @SuppressWarnings("unchecked")
+    private static Set<Set<Integer>> calculatePossiblities(final int size, final int sum, final ArrayList<Integer> availableNumbers) {
+        if (size == 1) {
+            final Set<Set<Integer>> possibilities = new HashSet<Set<Integer>>();
+            possibilities.add(new HashSet<Integer>(Arrays.asList(sum)));
+            return (availableNumbers.contains(sum) ? possibilities : null);
+        }
+        final int remainingSize = size - 1;
+        final Set<Set<Integer>> allPossibilities = new HashSet<Set<Integer>>();
+
+        for (final int number : availableNumbers) {
+            final int remainingSum = sum - number;
+
+            if (remainingSum < possibleSums[remainingSize - 1][0] || remainingSum > possibleSums[remainingSize - 1][1]) continue;
+
+            final ArrayList<Integer> remainingNumbers = (ArrayList<Integer>) availableNumbers.clone();
+            remainingNumbers.remove((Integer) number);
+
+            final Set<Set<Integer>> possibilities = calculatePossiblities(remainingSize, remainingSum, remainingNumbers);
+            if (possibilities != null) for (final var possibility : possibilities) {
+                possibility.add(number);
+                allPossibilities.add(possibility);
+            }
+        }
+
+        return allPossibilities;
     }
 
     /**
