@@ -7,6 +7,7 @@ import { HeaderComponent } from './core/header/header.component';
 import { FooterComponent } from './core/footer/footer.component';
 import { RulesComponent } from './pages/rules/rules.component';
 import { StrategiesComponent } from './pages/strategies/strategies.component';
+import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
 
 @NgModule({
   declarations: [
@@ -14,7 +15,8 @@ import { StrategiesComponent } from './pages/strategies/strategies.component';
     HeaderComponent,
     FooterComponent,
     RulesComponent,
-    StrategiesComponent
+    StrategiesComponent,
+    PageNotFoundComponent
   ],
   imports: [
     BrowserModule,
