@@ -8,6 +8,7 @@ import { FooterComponent } from './core/footer/footer.component';
 import { RulesComponent } from './pages/rules/rules.component';
 import { StrategiesComponent } from './pages/strategies/strategies.component';
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.com
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
