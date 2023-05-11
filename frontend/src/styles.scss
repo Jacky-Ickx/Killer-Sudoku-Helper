@@ -2,6 +2,7 @@
 @use '@angular/material' as mat;
 @use 'app/core/footer/footer.component-theme' as footer;
 @use 'app/core/header/header.component-theme' as header;
+@use 'app/pages/page-not-found/page-not-found.component-theme' as page-not-found;
 
 // import common material styles
 @include mat.core();
@@ -30,6 +31,7 @@ $light-theme: mat.define-light-theme((
 @include mat.button-theme($dark-theme);
 @include footer.theme($dark-theme);
 @include header.theme($dark-theme);
+@include page-not-found.theme($dark-theme);
 
 // Apply the light theme only when the user prefers light themes.
 @media (prefers-color-scheme: light) {
@@ -39,6 +41,7 @@ $light-theme: mat.define-light-theme((
     @include mat.button-color($light-theme);
     @include footer.color($light-theme);
     @include header.color($light-theme);
+    @include page-not-found.color($light-theme);
 }
 
 html, body, app-root {
