@@ -1,5 +1,6 @@
 // use material design framework
 @use '@angular/material' as mat;
+@use 'app/core/footer/footer.component-theme' as footer;
 
 // import common material styles
 @include mat.core();
@@ -26,6 +27,7 @@ $light-theme: mat.define-light-theme((
 // Apply the dark theme by default
 @include mat.core-theme($dark-theme);
 @include mat.button-theme($dark-theme);
+@include footer.theme($dark-theme);
 
 // Apply the light theme only when the user prefers light themes.
 @media (prefers-color-scheme: light) {
@@ -33,6 +35,7 @@ $light-theme: mat.define-light-theme((
     // typography and density styles.
     @include mat.core-color($light-theme);
     @include mat.button-color($light-theme);
+    @include footer.color($light-theme);
 }
 
 html, body, app-root {
