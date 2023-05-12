@@ -9,6 +9,7 @@ import { FooterComponent } from './core/footer/footer.component';
 import { RulesComponent } from './pages/rules/rules.component';
 import { StrategiesComponent } from './pages/strategies/strategies.component';
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
+import { ImprintComponent } from './pages/imprint/imprint.component';
 import { SharedModule } from './shared/shared.module';
 
 @NgModule({
@@ -18,7 +19,8 @@ import { SharedModule } from './shared/shared.module';
     FooterComponent,
     RulesComponent,
     StrategiesComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    ImprintComponent
   ],
   imports: [
     BrowserModule,

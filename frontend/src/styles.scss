@@ -3,6 +3,7 @@
 @use 'app/core/footer/footer.component-theme' as footer;
 @use 'app/core/header/header.component-theme' as header;
 @use 'styles-theme' as main;
+@use 'app/pages/imprint/imprint.component-style' as imprint;
 
 // import common material styles
 @include mat.core();
@@ -32,6 +33,7 @@ $light-theme: mat.define-light-theme((
 @include footer.theme($dark-theme);
 @include header.theme($dark-theme);
 @include main.theme($dark-theme);
+@include imprint.theme($dark-theme);
 
 // Apply the light theme only when the user prefers light themes.
 @media (prefers-color-scheme: light) {
@@ -42,6 +44,7 @@ $light-theme: mat.define-light-theme((
     @include footer.color($light-theme);
     @include header.color($light-theme);
     @include main.color($light-theme);
+    @include imprint.color($light-theme);
 }
 
 html, body, app-root {
