@@ -8,7 +8,7 @@
   // Get the typography config from the theme.
   $typography-config: mat.get-typography-config($theme);
 
-  h1 {
+  html {
     font-family: mat.font-family($typography-config);
   }
 }

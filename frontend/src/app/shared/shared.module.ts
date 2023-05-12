@@ -1,18 +1,23 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MatDividerModule } from '@angular/material/divider';
 import { ContentPaneComponent } from './content-pane/content-pane.component';
+import { DividerComponent } from './divider/divider.component';
 
 
 
 @NgModule({
   declarations: [
-    ContentPaneComponent
+    ContentPaneComponent,
+    DividerComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    MatDividerModule
   ],
   exports: [
-    ContentPaneComponent
+    ContentPaneComponent,
+    DividerComponent
   ]
 })
 export class SharedModule { }
