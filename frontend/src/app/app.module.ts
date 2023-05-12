@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatDividerModule } from '@angular/material/divider';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -8,7 +10,7 @@ import { FooterComponent } from './core/footer/footer.component';
 import { RulesComponent } from './pages/rules/rules.component';
 import { StrategiesComponent } from './pages/strategies/strategies.component';
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { SharedModule } from './shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -21,8 +23,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
+    MatDividerModule,
     AppRoutingModule,
-    BrowserAnimationsModule
+    SharedModule
   ],
   providers: [],
   bootstrap: [AppComponent]
