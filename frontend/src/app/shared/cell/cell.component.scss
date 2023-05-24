@@ -1,0 +1,15 @@
+.cell {
+    display: flex;
+    min-width: 3em;
+    min-height: 3em;
+    cursor: pointer;
+    border: 1px solid;
+}
+
+.cell-content {
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+
+}

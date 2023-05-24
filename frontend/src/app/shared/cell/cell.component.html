@@ -1,0 +1,6 @@
+<div class="cell" 
+[ngClass]="content.highlighted? 'highlighted' : ''" 
+[ngClass]="(content.values.length === 1 && !content.isPencilMark)? 'cell-value' : 'cell-pencil-marks'" 
+(mousedown)="onMouseDown($event)" (mouseover)="onMouseOver($event)"> 
+    <span *ngFor="let value of content.values">{{value}}</span>
+</div>

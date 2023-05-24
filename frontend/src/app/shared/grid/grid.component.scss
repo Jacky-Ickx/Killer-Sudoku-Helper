@@ -1,0 +1,22 @@
+.grid {
+    border-left: 3px solid;
+    border-top: 3px solid;
+}
+
+.grid app-cell:nth-child(3n) {
+    border-right: 3px solid;
+}
+
+.grid .row:nth-child(3n) {
+    border-bottom: 3px solid;
+}
+
+.row{
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+app-cell {
+    display: inline-flex;
+    height: 100%;
+}
