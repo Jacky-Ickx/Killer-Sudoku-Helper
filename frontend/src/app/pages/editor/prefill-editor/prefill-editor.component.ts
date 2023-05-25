@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { SudokuService } from 'src/app/core/services/sudoku.service';
 
 @Component({
   selector: 'app-prefill-editor',
@@ -6,5 +7,10 @@ import { Component } from '@angular/core';
   styleUrls: ['./prefill-editor.component.scss']
 })
 export class PrefillEditorComponent {
+  constructor(private sudoku: SudokuService) {
+    this.sudoku.inputMethod = 'prefill';
+    this.sudoku.removeHighlights();
+    this.sudoku.enableInput();
+  }
 
 }

@@ -26,11 +26,11 @@ export class GridComponent {
 	}
 
 	onCellMouseOver(coordinates: Coordinates) {
-		if (this.mouseDown) {
-			if (this.sudoku.highlightedCells.some(element => element.x === coordinates.x && element.y === coordinates.y)) return;
+		if (!this.mouseDown) return;
+		if (this.sudoku.highlightedCells.some(element => element.x === coordinates.x && element.y === coordinates.y)) return;
+		if (this.sudoku.inputMethod === 'prefill') return;
 
-			this.sudoku.highlightCell(coordinates);
-		}
+		this.sudoku.highlightCell(coordinates);
 	}
 
 	@HostListener('document:mousedown', ['$event'])
@@ -59,6 +59,7 @@ export class GridComponent {
 		
 		const value = parseInt(event.key);
 
-		this.sudoku.toggleValue(value);
+		if (this.sudoku.inputMethod === 'solve') this.sudoku.toggleValue(value);
+		else if (this.sudoku.inputMethod === 'prefill') this.sudoku.setValue(value);
 	}
 }

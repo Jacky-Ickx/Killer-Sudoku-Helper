@@ -10,7 +10,8 @@ export class SudokuService {
 	public grid: CellContent[][] = [];
 	public cages: Cage[] = [];
 	public highlightedCells: Coordinates[] = [];
-	public inputDisabled: boolean = false;
+	private inputDisabled: boolean = false;
+	public inputMethod: 'prefill' | 'solve' = 'solve';
 
 	possibleSums = [
         [ 1, 9 ],
@@ -55,6 +56,7 @@ export class SudokuService {
 		this.cages = [];
 		this.highlightedCells = [];
 		this.inputDisabled = false;
+		this.inputMethod = 'solve';
 	}
 
 	removeHighlights() {
@@ -74,8 +76,12 @@ export class SudokuService {
 		this.inputDisabled = true;
 	}
 
+	enableInput() {
+		this.inputDisabled = false;
+	}
+
 	toggleValue(value: number) {
-		if (this.inputDisabled) return;
+		if (this.inputDisabled || this.inputMethod !== 'solve') return;
 
 		const add_value: boolean = this.highlightedCells.some(coordinates => {
             return !this.grid[coordinates.y][coordinates.x].values.includes(value);
@@ -96,6 +102,14 @@ export class SudokuService {
 
 				cell.values = newValues; // this is angular change detection bullshit
 			}
+		});
+	}
+
+	setValue(value: number) {
+		if (this.inputDisabled || this.inputMethod !== 'prefill') return;
+
+		this.highlightedCells.forEach(coordinates => {
+			this.grid[coordinates.y][coordinates.x].values = [value];
 		});
 	}
 
