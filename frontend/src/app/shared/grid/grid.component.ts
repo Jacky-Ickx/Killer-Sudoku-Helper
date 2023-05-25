@@ -48,8 +48,6 @@ export class GridComponent {
 
 		this.highlightedCells = [];
 
-		// console.log(event);
-		console.log(coordinates)
 		this.grid[coordinates.y][coordinates.x].highlighted = true;
 		this.highlightedCells.push(coordinates);
 
@@ -62,6 +60,16 @@ export class GridComponent {
 			this.grid[coordinates.y][coordinates.x].highlighted = true;
 			this.highlightedCells.push(coordinates);
 		}
+	}
+
+	@HostListener('document:mousedown', ['$event'])
+	onDocumentMouseDown(event: MouseEvent) {
+		if (!this.mouseDown)
+		this.highlightedCells.forEach(coordinates => {
+			this.grid[coordinates.y][coordinates.x].highlighted = false;
+		});
+
+		this.highlightedCells = [];
 	}
 
 	@HostListener('document:mouseup', ['$event'])
@@ -78,12 +86,25 @@ export class GridComponent {
 		if (!numerical.test(event.key)) return;
 		
 		const value = parseInt(event.key);
+
+		const add_value: boolean = this.highlightedCells.some(coordinates => {
+            return !this.grid[coordinates.y][coordinates.x].values.includes(value);
+		})
+
 		this.highlightedCells.forEach(coordinates => {
             const cell = this.grid[coordinates.y][coordinates.x]
-			let new_vals = [value]
-			new_vals.push(...cell.values);
+			if(!add_value) {
+				let new_values = ([] as number[]).concat(...cell.values)
+				new_values = new_values.filter(item => item !== value);
+				
+				cell.values = new_values; // this is angular change detection bullshit
+			}
+			else if(!cell.values.includes(value)) {
+				let new_values = ([] as number[]).concat(...cell.values)
+				new_values.push(value);
 
-			cell.values = new_vals; // this is angular change detection bullshit
+				cell.values = new_values; // this is angular change detection bullshit
+			}
 		});
 		this.trigger = new Object(); // this is even worse angular change detection bullshit
 	}

@@ -15,7 +15,7 @@
   $accent-palette: map.get($color-config, 'accent');
 
   //Get the background color palette from the color-config
-  $bakground-pallete: map.get($color-config, background);
+  $background-palette: map.get($color-config, background);
 
   .cell{
     //background-color: mat.get-color-from-palette($secondary-palette, 500);
@@ -24,7 +24,7 @@
         background-color: mat.get-color-from-palette($accent-palette, 200);
     }
     &.in-cage > div > span.sum {
-        background-color: mat.get-color-from-palette($bakground-pallete, background);
+        background-color: mat.get-color-from-palette($background-palette, background);
 
         &.highlighted {
             background-color: mat.get-color-from-palette($accent-palette, 200);
@@ -36,6 +36,12 @@
 @mixin typography($theme) {
   // Get the typography config from the theme.
   $typography-config: mat.get-typography-config($theme);
+
+  .cell {
+    &.cell-value > .center{
+      font-size: xx-large;
+    }
+  }
 }
 
 @mixin theme($theme) {

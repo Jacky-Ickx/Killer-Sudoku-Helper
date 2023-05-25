@@ -60,6 +60,9 @@ html, body, app-root {
     height: 100%;
     margin: 0;
 }
+html {
+    font-size: min(2.25vw, 16px);
+}
 
 app-root {
     display: flex;
