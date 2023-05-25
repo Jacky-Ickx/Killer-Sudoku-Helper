@@ -1,4 +1,5 @@
 import { ChangeDetectorRef, Component, HostListener } from '@angular/core';
+import { Cage } from 'src/app/models/cage.model';
 import { CellContent } from 'src/app/models/cell.model';
 import { Coordinates } from 'src/app/models/coordinates.model';
 
@@ -9,7 +10,9 @@ import { Coordinates } from 'src/app/models/coordinates.model';
 })
 export class GridComponent {
 	grid: CellContent[][] = [];
-	highlightedCells: CellContent[] = [];
+    cages: Cage[] = [];
+	highlightedCells: Coordinates[] = [];
+
 	mouseDown: boolean = false;
 	trigger: any = undefined;
 
@@ -17,33 +20,47 @@ export class GridComponent {
 		for (let y = 0; y < 9; y++) {
 			this.grid[y] = [];
 			for (let x = 0; x < 9; x++) {
-				this.grid[y][x] = { values: [], isPencilMark: false, highlighted: false };
+				this.grid[y][x] = { 
+                    values: [], 
+                    isPencilMark: false, 
+                    highlighted: false,
+                    cage: {
+                        inCage: false,
+                        sum: 0,
+                        top: false,
+                        right: false,
+                        bottom: false,
+                        left: false,
+                        topRight: false,
+                        bottomRight: false,
+                        bottomLeft: false,
+                        topLeft: false
+                    }
+                };
 			}
 		}
 	}
 
 	onCellMouseDown(coordinates: Coordinates) {
-		this.highlightedCells.forEach(cell => {
-			cell.highlighted = false;
+		this.highlightedCells.forEach(coordinates => {
+			this.grid[coordinates.y][coordinates.x].highlighted = false;
 		});
 
 		this.highlightedCells = [];
 
 		// console.log(event);
 		console.log(coordinates)
-		const cell: CellContent = this.grid[coordinates.y][coordinates.x]
-		cell.highlighted = true;
-		this.highlightedCells.push(cell);
+		this.grid[coordinates.y][coordinates.x].highlighted = true;
+		this.highlightedCells.push(coordinates);
 
 		this.mouseDown = true;
 	}
 
 	onCellMouseOver(coordinates: Coordinates) {
 		if (this.mouseDown) {
-			const cell: CellContent = this.grid[coordinates.y][coordinates.x]
-			if (this.highlightedCells.includes(cell)) return;
-			cell.highlighted = true;
-			this.highlightedCells.push(cell);
+			if (this.highlightedCells.some(element => element.x === coordinates.x && element.y === coordinates.y)) return;
+			this.grid[coordinates.y][coordinates.x].highlighted = true;
+			this.highlightedCells.push(coordinates);
 		}
 	}
 
@@ -61,7 +78,8 @@ export class GridComponent {
 		if (!numerical.test(event.key)) return;
 		
 		const value = parseInt(event.key);
-		this.highlightedCells.forEach(cell => {
+		this.highlightedCells.forEach(coordinates => {
+            const cell = this.grid[coordinates.y][coordinates.x]
 			let new_vals = [value]
 			new_vals.push(...cell.values);
 

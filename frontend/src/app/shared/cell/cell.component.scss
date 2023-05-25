@@ -1,9 +1,46 @@
 .cell {
-    display: flex;
+    display: grid;
+    grid-template-columns: 0.25em auto 0.25em;
+    grid-template-rows: 0.25em auto 0.25em;
     min-width: 3em;
     min-height: 3em;
     cursor: pointer;
     border: 1px solid;
+    border-left: none;
+    border-top: none;
+    
+    &.in-cage > div {
+        border: 1px dashed;
+        
+        &.no-top {
+            border-top: none;
+
+            
+        }
+
+        &.no-right {
+            border-right: none;
+        }
+
+        &.no-bottom {
+            border-bottom: none;
+        }
+
+        &.no-left {
+            border-left: none;
+        }
+
+        &.center {
+            border: none
+        }
+        >span.sum{
+            position: absolute;
+            top: 0px;
+            left: 2px;
+            font-size: 0.5em;
+            padding: 0 2px;
+        }
+    }
 }
 
 .cell-content {
