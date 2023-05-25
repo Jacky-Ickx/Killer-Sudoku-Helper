@@ -1,6 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
+import { MatInputModule } from '@angular/material/input';
+import { MatIconModule} from '@angular/material/icon';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 import { EditorRoutingModule } from './editor-routing.module';
 import { SharedModule } from 'src/app/shared/shared.module';
@@ -16,8 +20,12 @@ import { PrefillEditorComponent } from './prefill-editor/prefill-editor.componen
   imports: [
     CommonModule,
     EditorRoutingModule,
+    SharedModule,
     MatButtonModule,
-    SharedModule
+    MatInputModule,
+    MatFormFieldModule,
+    MatIconModule,
+    ReactiveFormsModule
   ]
 })
 export class EditorModule { }

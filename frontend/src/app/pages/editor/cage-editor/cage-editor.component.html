@@ -1,6 +1,24 @@
 <app-content-pane>
-    <p>cage-editor works!</p>
-    <a mat-stroked-button color="primary" routerLink="../prefill">
+    <h2>Cage selection</h2>
+    <p>Please select a cage and set a value</p>
+
+    <app-grid></app-grid>
+
+    <mat-form-field appearance="outline">
+        <mat-label>Cage value</mat-label>
+        <input matInput [type]="'number'" [formControl]="sumFormControl" placeholder="Ex. 17" (keyup.enter)="createCage()" autofocus>
+        <button matSuffix mat-icon-button aria-label="Value" *ngIf="sumFormControl.valid" (click)="createCage()">
+            <mat-icon>arrow_forward</mat-icon>
+        </button>
+        <mat-error *ngIf="(sumFormControl.hasError('min') || sumFormControl.hasError('max'))&& !sumFormControl.hasError('required')">
+            Please enter a valid sum
+        </mat-error>
+        <mat-error *ngIf="sumFormControl.hasError('required')">
+            Sum is <strong>required</strong>
+        </mat-error>
+    </mat-form-field>
+
+    <a mat-stroked-button color="primary" (click)="onNextClick()">
         <span>Next</span>
     </a>
 </app-content-pane>

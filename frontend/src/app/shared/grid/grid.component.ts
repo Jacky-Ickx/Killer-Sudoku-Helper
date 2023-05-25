@@ -1,4 +1,5 @@
-import { ChangeDetectorRef, Component, HostListener } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
+import { SudokuService } from 'src/app/core/services/sudoku.service';
 import { Cage } from 'src/app/models/cage.model';
 import { CellContent } from 'src/app/models/cell.model';
 import { Coordinates } from 'src/app/models/coordinates.model';
@@ -10,102 +11,54 @@ import { Coordinates } from 'src/app/models/coordinates.model';
 })
 export class GridComponent {
 	grid: CellContent[][] = [];
-    cages: Cage[] = [];
-	highlightedCells: Coordinates[] = [];
 
 	mouseDown: boolean = false;
-	trigger: any = undefined;
 
-	constructor(private changeDetector: ChangeDetectorRef) {
-		for (let y = 0; y < 9; y++) {
-			this.grid[y] = [];
-			for (let x = 0; x < 9; x++) {
-				this.grid[y][x] = { 
-                    values: [], 
-                    isPencilMark: false, 
-                    highlighted: false,
-                    cage: {
-                        inCage: false,
-                        sum: 0,
-                        top: false,
-                        right: false,
-                        bottom: false,
-                        left: false,
-                        topRight: false,
-                        bottomRight: false,
-                        bottomLeft: false,
-                        topLeft: false
-                    }
-                };
-			}
-		}
+	constructor(private sudoku: SudokuService) {
+		this.grid = sudoku.grid;
 	}
 
 	onCellMouseDown(coordinates: Coordinates) {
-		this.highlightedCells.forEach(coordinates => {
-			this.grid[coordinates.y][coordinates.x].highlighted = false;
-		});
-
-		this.highlightedCells = [];
-
-		this.grid[coordinates.y][coordinates.x].highlighted = true;
-		this.highlightedCells.push(coordinates);
-
 		this.mouseDown = true;
+
+		this.sudoku.removeHighlights();
+		this.sudoku.highlightCell(coordinates);
 	}
 
 	onCellMouseOver(coordinates: Coordinates) {
 		if (this.mouseDown) {
-			if (this.highlightedCells.some(element => element.x === coordinates.x && element.y === coordinates.y)) return;
-			this.grid[coordinates.y][coordinates.x].highlighted = true;
-			this.highlightedCells.push(coordinates);
+			if (this.sudoku.highlightedCells.some(element => element.x === coordinates.x && element.y === coordinates.y)) return;
+
+			this.sudoku.highlightCell(coordinates);
 		}
 	}
 
 	@HostListener('document:mousedown', ['$event'])
-	onDocumentMouseDown(event: MouseEvent) {
-		if (!this.mouseDown)
-		this.highlightedCells.forEach(coordinates => {
-			this.grid[coordinates.y][coordinates.x].highlighted = false;
-		});
-
-		this.highlightedCells = [];
+	onDocumentMouseDown(event: MouseEvent) { 
+		const target = event.target as HTMLElement;
+		if (!this.mouseDown && (
+			target.tagName === 'app-content-pane'.toUpperCase() || target.parentElement?.tagName === 'app-content-pane'.toUpperCase()
+		)) {
+			this.sudoku.removeHighlights();
+		}
 	}
 
 	@HostListener('document:mouseup', ['$event'])
 	onDocumentMouseUp(event: MouseEvent) {
 		this.mouseDown = false;
-		console.log(this.highlightedCells);
+		console.debug(this.sudoku.highlightedCells);
 	}
 
 	@HostListener('document:keypress', ['$event'])
 	onDocumentKeyPress(event: KeyboardEvent) {
-		console.log(event);
+		console.debug(event);
+		if ((event.target as HTMLElement).tagName !== 'body'.toUpperCase()) return;
 
 		const numerical: RegExp = /^[0-9]$/;
 		if (!numerical.test(event.key)) return;
 		
 		const value = parseInt(event.key);
 
-		const add_value: boolean = this.highlightedCells.some(coordinates => {
-            return !this.grid[coordinates.y][coordinates.x].values.includes(value);
-		})
-
-		this.highlightedCells.forEach(coordinates => {
-            const cell = this.grid[coordinates.y][coordinates.x]
-			if(!add_value) {
-				let new_values = ([] as number[]).concat(...cell.values)
-				new_values = new_values.filter(item => item !== value);
-				
-				cell.values = new_values; // this is angular change detection bullshit
-			}
-			else if(!cell.values.includes(value)) {
-				let new_values = ([] as number[]).concat(...cell.values)
-				new_values.push(value);
-
-				cell.values = new_values; // this is angular change detection bullshit
-			}
-		});
-		this.trigger = new Object(); // this is even worse angular change detection bullshit
+		this.sudoku.toggleValue(value);
 	}
 }

@@ -11,6 +11,9 @@
     border: 1px solid;
     border-left: none;
     border-top: none;
+
+    box-sizing: border-box;
+
     >div.center {
         width: 100%;
         height: 100%;

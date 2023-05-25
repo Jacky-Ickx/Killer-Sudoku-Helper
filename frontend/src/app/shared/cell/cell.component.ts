@@ -13,8 +13,6 @@ export class CellComponent{
 	@Input() x!: number;
 	@Input() y!: number;
 
-	@Input() trigger: any;
-
 	@Output() mouseDown = new EventEmitter<Coordinates>();
 	@Output() mouseOver = new EventEmitter<Coordinates>();
 

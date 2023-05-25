@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { CageEditorComponent } from './cage-editor/cage-editor.component';
 import { PrefillEditorComponent } from './prefill-editor/prefill-editor.component';
+import { CageEditorCanDeactivateGuard } from './cage-editor/deactivate.guard';
 
 const routes: Routes = [
   {
@@ -11,7 +12,8 @@ const routes: Routes = [
   },
   {
     path: 'cages',
-    component: CageEditorComponent
+    component: CageEditorComponent,
+    canDeactivate: [CageEditorCanDeactivateGuard]
   },
   {
     path: 'prefill',
@@ -21,6 +23,7 @@ const routes: Routes = [
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
+  providers: [CageEditorCanDeactivateGuard]
 })
 export class EditorRoutingModule { }
