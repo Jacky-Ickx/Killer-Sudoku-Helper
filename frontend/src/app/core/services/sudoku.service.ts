@@ -135,7 +135,8 @@ export class SudokuService {
 			}
 		});
 		
-		if (cage.cells.some(cell => !cell['adjacency'].top && !cell['adjacency'].right && !cell['adjacency'].bottom && !cell['adjacency'].left)) 
+		if (cage.cells.length > 1 &&
+			cage.cells.some(cell => !cell['adjacency'].top && !cell['adjacency'].right && !cell['adjacency'].bottom && !cell['adjacency'].left)) 
 			throw new Error('cells of a cage need to be adjacent to at least one other cell');
 
 		cage.cells.forEach(cell => {
