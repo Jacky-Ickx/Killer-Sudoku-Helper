@@ -84,7 +84,6 @@ task localH2(type: org.springframework.boot.gradle.tasks.run.BootRun){
     classpath = sourceSets.localH2.runtimeClasspath
 }
 
-
 tasks.named('test') {
     // Use JUnit Platform for unit tests.
     useJUnitPlatform()
@@ -92,4 +91,8 @@ tasks.named('test') {
 }
 jacocoTestReport {
     dependsOn test // tests are required to run before generating the report
+}
+
+tasks.withType(org.springframework.boot.gradle.tasks.run.BootRun) {
+    jvmArgs = ["-Dspring.output.ansi.enabled=ALWAYS"]
 }
