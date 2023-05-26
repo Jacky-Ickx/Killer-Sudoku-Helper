@@ -6,9 +6,14 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * This class is used to handle the Cages of a Killer Sudoku.
  */
+@JsonIgnoreProperties(ignoreUnknown = true, value = { "possibleCombinations", "setCombination" })
 public class Cage {
     /** possible cage-sums for every possible cage-size */
     // @formatter:off
@@ -57,7 +62,9 @@ public class Cage {
     /** positions of cells that make up the cage */
     private final Position[] cells;
 
+    /** Set of all possible combinations for this cage */
     private Set<Set<Integer>> possibleCombinations;
+    /** inidicates, whether solver has found the correct combination for this cage? */
     private final boolean setCombination;
 
     // TODO: add handling for possible combinations
@@ -70,7 +77,8 @@ public class Cage {
      * @throws IllegalArgumentException when no cells or more than 9 cells are given, when target sum is not achievable,
      *                                  when there are cells that are not adjacent to any other cell
      */
-    public Cage(final int sum, final Position[] cells) throws IllegalArgumentException {
+    @JsonCreator
+    public Cage(@JsonProperty("sum") final int sum, @JsonProperty("cells") final Position[] cells) throws IllegalArgumentException {
         // check if amount of cells is in [1, 9]
         if (cells.length <= 0 || cells.length > 9) {
             final String errorMessage = MessageFormat.format("amount of cells must be in [1, 9]; got {0} cells", cells.length);

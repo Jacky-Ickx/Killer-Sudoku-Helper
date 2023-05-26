@@ -4,11 +4,14 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 // IMPORTANT: empty cells in grid are currently assumed to be 0 (by Cage::checkSum)
 // TODO: logging
 /**
  * This class represents a killer sudoku.
  */
+@JsonIgnoreProperties(ignoreUnknown = true, value = { "startingGrid", "solvedGrid" })
 public class KillerSudoku {
     /** Cages of the killer sudoku */
     private final Cage[] cages;

@@ -4,26 +4,28 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.stream.IntStream;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 /**
  * This Class is used to handle the Cells of a (Killer) Sudoku Grid.
  */
+@JsonIgnoreProperties(ignoreUnknown = true, value = { "possibleValues" })
 public class Cell {
     /** constant indicating an empty value */
     public static final int NO_VALUE = 0;
 
     /** value of the cell */
-    private int value;
+    private final HashSet<Integer> values = new HashSet<Integer>();
     /** list of possible valueos of the cell */
     private ArrayList<Integer> possibleValues;
     /** set of pencil marks of the cell */
-    private final HashSet<Integer> pencilMarks;
+    private boolean isPencilMark;
 
     /**
      * Basic constructor
      */
     public Cell() {
-        this.value = NO_VALUE;
-        this.pencilMarks = new HashSet<>();
+        this.isPencilMark = false;
         this.resetPossibleValues();
     }
 
@@ -60,7 +62,8 @@ public class Cell {
      * @return pencil marks
      */
     public HashSet<Integer> getPencilMarks() {
-        return this.pencilMarks;
+        if (this.isPencilMark) return this.values;
+        else return new HashSet<Integer>();
     }
 
     /**
@@ -69,7 +72,7 @@ public class Cell {
      * @param value pencil mark to remove
      */
     public void removePencilMark(final Integer value) {
-        this.pencilMarks.remove(value);
+        this.values.remove(value);
     }
 
     /**
@@ -78,8 +81,8 @@ public class Cell {
      * @param value pencil mark to add
      */
     public void addPencilMark(final Integer value) {
-        this.unsetValue();
-        this.pencilMarks.add(value);
+        this.isPencilMark = true;
+        this.values.add(value);
     }
 
     /**
@@ -88,14 +91,20 @@ public class Cell {
      * @return value
      */
     public int getValue() {
-        return this.value;
+        if (this.values.size() != 1 || this.isPencilMark == true) {
+            return NO_VALUE;
+        }
+        for (final int value : this.values) {
+            return value;
+        }
+        return NO_VALUE;
     }
 
     /**
      * removes the value of a cell
      */
     public void unsetValue() {
-        this.value = NO_VALUE;
+        this.values.clear();
     }
 
     /**
@@ -104,7 +113,8 @@ public class Cell {
      * @param value value to be set
      */
     public void setValue(final int value) {
-        this.pencilMarks.clear();
-        this.value = value;
+        this.values.clear();
+        this.isPencilMark = false;
+        this.values.add(value);
     }
 }
