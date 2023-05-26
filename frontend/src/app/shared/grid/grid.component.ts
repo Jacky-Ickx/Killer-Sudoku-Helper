@@ -49,17 +49,31 @@ export class GridComponent {
 		console.debug(this.sudoku.highlightedCells);
 	}
 
-	@HostListener('document:keypress', ['$event'])
-	onDocumentKeyPress(event: KeyboardEvent) {
+	@HostListener('document:keydown', ['$event'])
+	onDocumentKeyDown(event: KeyboardEvent) {
 		console.debug(event);
 		if ((event.target as HTMLElement).tagName !== 'body'.toUpperCase()) return;
 
 		const numerical: RegExp = /^[0-9]$/;
-		if (!numerical.test(event.key)) return;
-		
+		if (numerical.test(event.key)) {
+            this.handleNumericalKeyDown(event);
+            return;
+        }
+
+        if (['backspace', 'delete', 'c'].includes(event.key.toLowerCase())) {
+            this.handleRemoveKeyDown(event);
+            return;
+        }
+	}
+
+    handleNumericalKeyDown(event: KeyboardEvent) {
 		const value = parseInt(event.key);
 
 		if (this.sudoku.inputMethod === 'solve') this.sudoku.toggleValue(value);
 		else if (this.sudoku.inputMethod === 'prefill') this.sudoku.setValue(value);
-	}
+    }
+
+    handleRemoveKeyDown(event: KeyboardEvent) {
+        this.sudoku.deleteHighlighted();
+    }
 }

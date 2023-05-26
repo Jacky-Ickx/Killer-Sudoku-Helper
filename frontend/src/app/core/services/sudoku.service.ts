@@ -113,6 +113,12 @@ export class SudokuService {
 		});
 	}
 
+    deleteHighlighted() {
+        this.highlightedCells.forEach(coordinates => {
+			this.grid[coordinates.y][coordinates.x].values = [];
+		});
+    }
+
 	async cageFromHighlighted(sum: number): Promise<void> {
 		if (this.highlightedCells.length < 1 || this.highlightedCells.length > 9) throw new Error('invalid amount of cells selected'); 
 		if (sum < this.possibleSums[this.highlightedCells.length-1][0] || 
@@ -136,6 +142,7 @@ export class SudokuService {
 		let highestCell = 9;
 		let leftmostHighest = 9;
 
+        /* get adjacencies */
 		cage.cells.forEach(cell => {
 			cell['adjacency'] = {
 				top: cage.cells.some(position => position.y === cell.y-1 && position.x === cell.x),
@@ -153,6 +160,7 @@ export class SudokuService {
 			cage.cells.some(cell => !cell['adjacency'].top && !cell['adjacency'].right && !cell['adjacency'].bottom && !cell['adjacency'].left)) 
 			throw new Error('cells of a cage need to be adjacent to at least one other cell');
 
+        /* construct new grid[y][x].cage values */
 		cage.cells.forEach(cell => {
 			this.grid[cell.y][cell.x].cage = {
 				inCage: true,
