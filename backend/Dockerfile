@@ -5,10 +5,10 @@ RUN gradle build --no-daemon
 
 FROM openjdk:17-slim
 
-# EXPOSE 8080
+EXPOSE 8080
 
 RUN mkdir /app
 
-COPY --from=build /home/gradle/app/build/libs/*.jar /app/backend.jar
+COPY --from=build /home/gradle/app/build/libs/app.jar /app/backend.jar
 
-ENTRYPOINT ["java", "-jar", "/app/backend.jar"]
+ENTRYPOINT ["java", "-Dspring.output.ansi.enabled=ALWAYS", "-jar", "/app/backend.jar"]
