@@ -12,25 +12,31 @@ import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.com
 import { ImprintComponent } from './pages/imprint/imprint.component';
 import { SharedModule } from './shared/shared.module';
 import { HttpClientModule } from '@angular/common/http';
+import { RxStompService, rxStompServiceFactory } from './rx-stomp.service';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    HeaderComponent,
-    FooterComponent,
-    RulesComponent,
-    StrategiesComponent,
-    PageNotFoundComponent,
-    ImprintComponent
-  ],
-  imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    AppRoutingModule,
-    SharedModule,
-    HttpClientModule
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
+	declarations: [
+		AppComponent,
+		HeaderComponent,
+		FooterComponent,
+		RulesComponent,
+		StrategiesComponent,
+		PageNotFoundComponent,
+		ImprintComponent
+	],
+	imports: [
+		BrowserModule,
+		BrowserAnimationsModule,
+		AppRoutingModule,
+		SharedModule,
+		HttpClientModule
+	],
+	providers: [
+		{
+			provide: RxStompService,
+			useFactory: rxStompServiceFactory
+		}
+	],
+	bootstrap: [AppComponent]
 })
 export class AppModule { }

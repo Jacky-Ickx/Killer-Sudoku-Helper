@@ -16,7 +16,7 @@ export class SudokuService {
 	private inputDisabled: boolean = false;
 	public inputMethod: 'prefill' | 'solve' = 'solve';
 
-    private basePath = environment.backend_url;
+    private basePath = `${environment.protocol}://${environment.backend_url}`;
 
 	possibleSums = [
         [ 1, 9 ],
