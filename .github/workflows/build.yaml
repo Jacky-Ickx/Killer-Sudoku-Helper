@@ -32,11 +32,11 @@ jobs:
         with:
           context: backend
           push: true
-          tags: killer-sudoku-helper/backend:latest
+          tags: killersudokuhelper/backend:latest
 
       - name: Build and push frontend
         uses: docker/build-push-action@v4
         with:
           context: frontend
           push: true
-          tags: killer-sudoku-helper/frontend:latest
+          tags: killersudokuhelper/frontend:latest
