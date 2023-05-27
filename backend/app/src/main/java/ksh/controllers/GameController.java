@@ -31,7 +31,7 @@ public class GameController {
         this.repository = repository;
     }
 
-    @GetMapping(path = "/game/{id}/startingGrid", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = "/games/{id}/startingGrid", produces = MediaType.APPLICATION_JSON_VALUE)
     public StartingGrid getGameById(@PathVariable final String id) throws JsonProcessingException {
         final StartingGridEntity entity = this.repository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "given id does not exist"));
         try {
@@ -42,7 +42,7 @@ public class GameController {
         }
     }
 
-    @PostMapping(path = "/game", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "/games", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.TEXT_PLAIN_VALUE)
     public String createGame(@RequestBody final StartingGrid sudoku) {
         try {
             final StartingGridEntity entity = sudoku.toEntity();

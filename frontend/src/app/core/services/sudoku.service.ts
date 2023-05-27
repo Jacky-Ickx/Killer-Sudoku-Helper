@@ -1,7 +1,10 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Cage } from 'src/app/models/cage.model';
 import { CellContent } from 'src/app/models/cell.model';
 import { Coordinates } from 'src/app/models/coordinates.model';
+import { environment } from 'src/environments/environment';
+import { Observable } from 'rxjs';
 
 @Injectable({
 	providedIn: 'root',
@@ -12,6 +15,8 @@ export class SudokuService {
 	public highlightedCells: Coordinates[] = [];
 	private inputDisabled: boolean = false;
 	public inputMethod: 'prefill' | 'solve' = 'solve';
+
+    private basePath = environment.backend_url;
 
 	possibleSums = [
         [ 1, 9 ],
@@ -25,7 +30,7 @@ export class SudokuService {
         [ 45, 45 ]
     ];
 
-	constructor() {
+	constructor(private httpClient: HttpClient) {
 		this.resetState();
 	}
 
@@ -185,4 +190,27 @@ export class SudokuService {
 
 		this.grid[highestCell][leftmostHighest].cage.sum = cage.sum;
 	}
+
+    sendAsStartingGrid(): Observable<string> {
+        const startingGrid: number[][] = []
+        this.grid.forEach(row => {
+            startingGrid.push(
+                row.map(cell => cell.values.length > 0? cell.values[0] : 0)
+            );
+        });
+        this.cages.forEach(cage => {
+            cage.cells.forEach(cell => {
+                delete cell['adjacency']
+            })
+        })
+
+        return this.httpClient.post(
+            `${this.basePath}/games`,
+            {
+                grid: startingGrid,
+                cages: this.cages
+            },
+            {responseType: 'text'}
+        );
+    }
 }

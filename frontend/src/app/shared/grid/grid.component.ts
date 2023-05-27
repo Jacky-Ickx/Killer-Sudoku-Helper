@@ -1,6 +1,5 @@
 import { Component, HostListener } from '@angular/core';
 import { SudokuService } from 'src/app/core/services/sudoku.service';
-import { Cage } from 'src/app/models/cage.model';
 import { CellContent } from 'src/app/models/cell.model';
 import { Coordinates } from 'src/app/models/coordinates.model';
 
@@ -46,7 +45,7 @@ export class GridComponent {
 	@HostListener('document:mouseup', ['$event'])
 	onDocumentMouseUp(event: MouseEvent) {
 		this.mouseDown = false;
-		console.debug(this.sudoku.highlightedCells);
+		console.debug('highlighted cells:', this.sudoku.highlightedCells);
 	}
 
 	@HostListener('document:keydown', ['$event'])

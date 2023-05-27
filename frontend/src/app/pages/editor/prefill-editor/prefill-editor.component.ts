@@ -13,4 +13,10 @@ export class PrefillEditorComponent {
     this.sudoku.enableInput();
   }
 
+  onFinishClick() {
+    console.debug(`sending starting grid`)
+    this.sudoku.sendAsStartingGrid().subscribe(id => {
+        console.debug(`recieved game id: ${id}`);
+    })
+  }
 }

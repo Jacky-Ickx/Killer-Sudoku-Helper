@@ -11,6 +11,7 @@ import { StrategiesComponent } from './pages/strategies/strategies.component';
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
 import { ImprintComponent } from './pages/imprint/imprint.component';
 import { SharedModule } from './shared/shared.module';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { SharedModule } from './shared/shared.module';
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
-    SharedModule
+    SharedModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
