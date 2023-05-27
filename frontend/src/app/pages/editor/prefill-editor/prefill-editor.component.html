@@ -5,6 +5,9 @@
     <app-grid></app-grid>
 
     <a mat-stroked-button color="primary" (click)="onFinishClick()">
-        <span>Finish</span>
+        <span style="display: flex;">
+            <span>Finish</span>
+            <mat-progress-spinner [mode]="'indeterminate'" *ngIf="startingGame" [diameter]="17" style="margin-left: 1em;"></mat-progress-spinner>
+        </span>
     </a>
 </app-content-pane>
