@@ -11,6 +11,10 @@ const routes: Routes = [
     loadChildren: () => import('./pages/home/home.module').then(m => m.HomeModule)
   },
   {
+    path: 'editor',
+    loadChildren: () => import('./pages/editor/editor.module').then(m => m.EditorModule)
+  },
+  {
     path: 'imprint',
     component: ImprintComponent
   },

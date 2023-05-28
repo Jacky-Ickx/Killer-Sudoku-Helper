@@ -1,0 +1,57 @@
+<div class="cell" style="position: relative;"
+[ngClass]="{
+    'highlighted': content.highlighted, 
+    'cell-value': (content.values.length === 1 && !content.isPencilMark),
+    'cell-pencil-marks': !(content.values.length === 1 && !content.isPencilMark),
+    'in-cage': content.cage.inCage
+}" 
+(mousedown)="onMouseDown($event)" (mouseover)="onMouseOver($event)"> 
+    <div class="no-top no-left"
+    [ngClass]="{
+        'no-right': !content.cage.top || (content.cage.left && content.cage.topLeft),
+        'no-bottom': !content.cage.left || (content.cage.top && content.cage.topLeft)
+    }"></div>
+
+    <div class="no-top no-left no-right"
+    [ngClass]="{
+        'no-bottom': content.cage.top
+    }">
+        <span class="sum" [ngClass]="{'highlighted': content.highlighted}" *ngIf="content.cage.sum > 0 && content.cage.inCage">{{content.cage.sum}}</span>
+    </div>
+
+    <div class="no-top no-right"
+    [ngClass]="{
+        'no-left': !content.cage.top || (content.cage.right && content.cage.topRight),
+        'no-bottom': !content.cage.right || (content.cage.top && content.cage.topRight)
+    }"></div>
+
+    <div class="no-left no-top no-bottom"
+    [ngClass]="{
+        'no-right': content.cage.left
+    }"></div>
+
+    <div class="center">
+        <span *ngFor="let value of content.values">{{value}}</span>
+    </div>
+
+    <div class="no-right no-top no-bottom"
+    [ngClass]="{
+        'no-left': content.cage.right
+    }"></div>
+    <div class="no-bottom no-left"
+    [ngClass]="{
+        'no-right': !content.cage.bottom || (content.cage.left && content.cage.bottomLeft),
+        'no-top': !content.cage.left || (content.cage.bottom && content.cage.bottomLeft)
+    }"></div>
+
+    <div class="no-bottom no-left no-right"
+    [ngClass]="{
+        'no-top': content.cage.bottom
+    }"></div>
+
+    <div class="no-bottom no-right"
+    [ngClass]="{
+        'no-left': !content.cage.bottom || (content.cage.right && content.cage.bottomRight),
+        'no-top': !content.cage.right || (content.cage.bottom && content.cage.bottomRight)
+    }"></div>
+</div>

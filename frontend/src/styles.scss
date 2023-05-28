@@ -4,6 +4,8 @@
 @use 'app/core/header/header.component-theme' as header;
 @use 'styles-theme' as main;
 @use 'app/pages/imprint/imprint.component-style' as imprint;
+@use 'app/shared/cell/cell.component-theme' as cell;
+@use 'app/shared/grid/grid.component-theme' as grid;
 
 // import common material styles
 @include mat.core();
@@ -11,8 +13,8 @@
 // Define a dark theme
 $dark-theme: mat.define-dark-theme((
     color: (
-        primary: mat.define-palette(mat.$pink-palette),
-        accent: mat.define-palette(mat.$blue-grey-palette),
+        primary: mat.define-palette(mat.$cyan-palette),
+        accent: mat.define-palette(mat.$teal-palette),
     ),
     // Only include `typography` and `density` in the default dark theme.
     typography: mat.define-typography-config(),
@@ -22,35 +24,44 @@ $dark-theme: mat.define-dark-theme((
 // Define a light theme
 $light-theme: mat.define-light-theme((
     color: (
-        primary: mat.define-palette(mat.$indigo-palette),
-        accent: mat.define-palette(mat.$pink-palette),
+        primary: mat.define-palette(mat.$deep-purple-palette),
+        accent: mat.define-palette(mat.$purple-palette),
     ),
 ));
 
 // Apply the dark theme by default
-@include mat.core-theme($dark-theme);
-@include mat.button-theme($dark-theme);
+@include mat.all-component-themes($dark-theme);
+// @include mat.core-theme($dark-theme);
+// @include mat.button-theme($dark-theme);
 @include footer.theme($dark-theme);
 @include header.theme($dark-theme);
 @include main.theme($dark-theme);
 @include imprint.theme($dark-theme);
+@include cell.theme($dark-theme);
+@include grid.theme($dark-theme);
 
 // Apply the light theme only when the user prefers light themes.
 @media (prefers-color-scheme: light) {
     // Use the `-color` mixins to only apply color styles without reapplying the same
     // typography and density styles.
-    @include mat.core-color($light-theme);
-    @include mat.button-color($light-theme);
+    @include mat.all-component-colors($light-theme);
+    // @include mat.core-color($light-theme);
+    // @include mat.button-color($light-theme);
     @include footer.color($light-theme);
     @include header.color($light-theme);
     @include main.color($light-theme);
     @include imprint.color($light-theme);
+    @include cell.color($light-theme);
+    @include grid.color($light-theme);
 }
 
 html, body, app-root {
     width: 100%;
     height: 100%;
     margin: 0;
+}
+html {
+    font-size: min(2.25vw, 16px);
 }
 
 app-root {

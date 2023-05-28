@@ -4,11 +4,14 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 // IMPORTANT: empty cells in grid are currently assumed to be 0 (by Cage::checkSum)
 // TODO: logging
 /**
  * This class represents a killer sudoku.
  */
+@JsonIgnoreProperties(ignoreUnknown = true, value = { "startingGrid", "solvedGrid" })
 public class KillerSudoku {
     /** Cages of the killer sudoku */
     private final Cage[] cages;
@@ -87,6 +90,23 @@ public class KillerSudoku {
         validateIntGridDimensions(solvedGrid);
         // TODO: further validation
         this.solvedGrid = solvedGrid;
+    }
+
+    /**
+     * checks whether the cell at a given position is either unsolved or solved correctly
+     * 
+     * @param x horizontal position of the cell
+     * @param y verticale position of the cell
+     * @return whether cell has no value or the correct value
+     * @throws IllegalStateException when the sudoku has not been solved yet
+     */
+    public boolean checkCell(final int x, final int y) throws IllegalStateException {
+        try {
+            return (this.getValue(x, y) == Cell.NO_VALUE || this.getValue(x, y) == this.solvedGrid[y][x]);
+        }
+        catch (final NullPointerException e) {
+            throw new IllegalStateException(e);
+        }
     }
 
     /**

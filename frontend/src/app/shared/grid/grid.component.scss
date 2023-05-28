@@ -1,0 +1,35 @@
+:host, .grid {
+    width: 100%;
+    aspect-ratio: 1;
+    box-sizing: border-box;
+}
+
+.grid {
+    border-left: 4px solid;
+    border-top: 4px solid;
+    display: flex;
+    flex-direction: column;
+}
+
+.grid app-cell:nth-child(3n) {
+    border-right: 3px solid;
+}
+
+.grid .row:nth-child(3n) {
+    border-bottom: 3px solid;
+}
+
+.row{
+    display: flex;
+    flex-wrap: nowrap;
+    width: 100%;
+    aspect-ratio: 9;
+}
+
+app-cell {
+    flex-grow: 1;
+    flex-shrink: 1;
+    display: inline-flex;
+    height: 100%;
+    width: 100%;
+}

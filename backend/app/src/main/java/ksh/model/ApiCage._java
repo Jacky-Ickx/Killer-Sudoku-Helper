@@ -1,0 +1,84 @@
+package ksh.model;
+
+import java.util.stream.Stream;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class ApiCage {
+    @JsonProperty("sum")
+    private int sum;
+    @JsonProperty("cells")
+    private ApiPosition[] cells;
+
+    @JsonCreator
+    public ApiCage(@JsonProperty("sum") final int sum, @JsonProperty("cells") final ApiPosition[] cells) {
+        this.sum = sum;
+        this.cells = cells;
+    }
+
+    public Cage toCage() {
+        final Position[] cells = (Position[]) Stream.of(this.cells).map(cell -> cell.toPosition()).toArray();
+        return new Cage(this.sum, cells);
+    }
+
+    @JsonProperty("sum")
+    public int getSum() {
+        return this.sum;
+    }
+
+    @JsonProperty("sum")
+    public void setSum(final int sum) {
+        this.sum = sum;
+    }
+
+    @JsonProperty("cells")
+    public ApiPosition[] getCells() {
+        return this.cells;
+    }
+
+    @JsonProperty("cells")
+    public void setCells(final ApiPosition[] cells) {
+        this.cells = cells;
+    }
+}
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+class ApiPosition {
+    @JsonProperty("x")
+    private int x;
+    @JsonProperty("y")
+    private int y;
+
+    @JsonCreator
+    public ApiPosition(@JsonProperty("x") final int x, @JsonProperty("y") final int y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    public Position toPosition() {
+        return new Position(this.x, this.y);
+    }
+
+    @JsonProperty("x")
+    public int getX() {
+        return this.x;
+    }
+
+    @JsonProperty("x")
+    public void setX(final int x) {
+        this.x = x;
+    }
+
+    @JsonProperty("y")
+    public int getY() {
+        return this.y;
+    }
+
+    @JsonProperty("y")
+    public void setY(final int y) {
+        this.y = y;
+    }
+}

@@ -1,0 +1,13 @@
+<app-content-pane>
+    <h2>Pre-fill grid</h2>
+    <p>Please enter given values into the grid</p>
+
+    <app-grid></app-grid>
+
+    <a mat-stroked-button color="primary" (click)="onFinishClick()">
+        <span style="display: flex;">
+            <span>Finish</span>
+            <mat-progress-spinner [mode]="'indeterminate'" *ngIf="startingGame" [diameter]="17" style="margin-left: 1em;"></mat-progress-spinner>
+        </span>
+    </a>
+</app-content-pane>

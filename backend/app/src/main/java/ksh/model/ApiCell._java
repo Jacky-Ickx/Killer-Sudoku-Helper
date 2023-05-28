@@ -1,0 +1,39 @@
+package ksh.model;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class ApiCell {
+    @JsonProperty("values")
+    private int[] values;
+    @JsonProperty("isPencilMark")
+    private boolean isPencilMark;
+
+    @JsonCreator
+    public ApiCell(@JsonProperty("value") final int[] values, @JsonProperty("isPencilMark") final boolean isPencilMark) {
+        this.values = values;
+        this.isPencilMark = isPencilMark;
+    }
+
+    @JsonProperty("values")
+    public int[] getValues() {
+        return this.values;
+    }
+
+    @JsonProperty("values")
+    public void setValues(final int[] values) {
+        this.values = values;
+    }
+
+    @JsonProperty("isPencilMark")
+    public boolean getIsPencilMark() {
+        return this.isPencilMark;
+    }
+
+    @JsonProperty("isPencilMark")
+    public void setIsPencilMark(final boolean isPencilMark) {
+        this.isPencilMark = isPencilMark;
+    }
+}
