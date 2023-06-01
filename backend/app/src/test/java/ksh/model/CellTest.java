@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.stream.IntStream;
 
 import org.apache.commons.collections4.CollectionUtils;
@@ -25,77 +24,58 @@ class CellTest {
     }
 
     @Test
-    void initializeWithNoPencilMarks() {
+    void initializeWithNoValues() {
         final Cell cell = new Cell();
-        final var emptySet = new HashSet<Integer>();
+        final int[] emptyArray = {};
 
-        assertTrue(cell.getPencilMarks().equals(emptySet), "Cell should be initialized with no pencil marks");
+        assertTrue(cell.getValues().equals(emptyArray), "Cell should be initialized with no values");
     }
 
     @Test
-    void setPencilMark() {
+    void addValue() {
         final Cell cell = new Cell();
-        final var setWith1 = new HashSet<Integer>();
-        setWith1.add(1);
+        final int[] arrayWith1 = { 1 };
 
-        cell.addPencilMark(1);
-        assertTrue(cell.getPencilMarks().equals(setWith1), "Cell should have pencil mark 1");
+        cell.addValue(1);
+        assertTrue(cell.getValues().equals(arrayWith1), "Cell should have value 1");
     }
 
     @Test
-    void ignoreDuplicatePencilMark() {
+    void ignoreDuplicateValue() {
         final Cell cell = new Cell();
-        final var setWith1 = new HashSet<Integer>();
-        setWith1.add(1);
+        final int[] arrayWith1 = { 1 };
 
-        cell.addPencilMark(1);
-        cell.addPencilMark(1);
-        assertTrue(cell.getPencilMarks().equals(setWith1), "Cell should not have pencil mark 1 duplicated");
+        cell.addValue(1);
+        cell.addValue(1);
+        assertTrue(cell.getValues().equals(arrayWith1), "Cell should not have value 1 duplicated");
     }
 
     @Test
-    void removePencilMark() {
+    void removeValue() {
         final Cell cell = new Cell();
-        final var setWith1 = new HashSet<Integer>();
-        setWith1.add(1);
+        final int[] arrayWith1 = { 1 };
 
-        cell.addPencilMark(1);
-        cell.addPencilMark(9);
-        cell.removePencilMark(9);
-        assertTrue(cell.getPencilMarks().equals(setWith1), "Cell should have pencil mark 1");
+        cell.addValue(1);
+        cell.addValue(9);
+        cell.removeValue(9);
+        assertTrue(cell.getValues().equals(arrayWith1), "Cell should have value 1");
     }
 
     @Test
-    void resetPencilMarksWhenSettingValue() {
-        final Cell cell = new Cell();
-        final var emptySet = new HashSet<Integer>();
-
-        cell.addPencilMark(1);
-        cell.setValue(1);
-        assertTrue(cell.getPencilMarks().equals(emptySet), "Pencil marks should be cleared when setting a value");
-    }
-
-    @Test
-    void initializeWithNoValue() {
+    void singularValue() {
         final Cell cell = new Cell();
 
-        assertEquals(Cell.NO_VALUE, cell.getValue(), "Cell should be initialized with NO_VALUE");
-    }
-
-    @Test
-    void setValue() {
-        final Cell cell = new Cell();
-
-        cell.setValue(5);
+        cell.addValue(5);
         assertEquals(5, cell.getValue(), "Cell should have value 5");
     }
 
     @Test
-    void resetValueWhenAddingPencilMark() {
+    void noValueWhenIsPencilMark() {
         final Cell cell = new Cell();
-        cell.setValue(5);
+        cell.addValue(5);
 
-        cell.addPencilMark(1);
-        assertEquals(Cell.NO_VALUE, cell.getValue(), "adding a pencil mark should clear the value");
+        cell.addValue(1);
+        cell.setIsPencilMark(true);
+        assertEquals(Cell.NO_VALUE, cell.getValue(), "getValue() should return NO_VALUE when isPencilMark is true");
     }
 }

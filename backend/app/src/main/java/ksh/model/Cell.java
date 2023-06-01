@@ -9,16 +9,16 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 /**
  * This Class is used to handle the Cells of a (Killer) Sudoku Grid.
  */
-@JsonIgnoreProperties(ignoreUnknown = true, value = { "possibleValues" })
+@JsonIgnoreProperties(ignoreUnknown = true, value = { "possibleValues", "value" })
 public class Cell {
     /** constant indicating an empty value */
     public static final int NO_VALUE = 0;
 
-    /** value of the cell */
+    /** values of the cell */
     private final HashSet<Integer> values = new HashSet<Integer>();
-    /** list of possible valueos of the cell */
+    /** list of possible values of the cell */
     private ArrayList<Integer> possibleValues;
-    /** set of pencil marks of the cell */
+    /** indicates wether singular value of cell is pencil mark or not */
     private boolean isPencilMark;
 
     /**
@@ -57,32 +57,25 @@ public class Cell {
     }
 
     /**
-     * gets all pencil marks of the cell
+     * gets pencilMark status of the cell
      * 
-     * @return pencil marks
+     * @return pencilMark status
      */
-    public HashSet<Integer> getPencilMarks() {
-        if (this.isPencilMark) return this.values;
-        else return new HashSet<Integer>();
+    public boolean getIsPencilMark() {
+        return this.isPencilMark;
     }
 
     /**
-     * removes a pencil mark from the cell
+     * sets pencilMark status of the cell
      * 
-     * @param value pencil mark to remove
+     * @param isPencilMark status to set
      */
-    public void removePencilMark(final Integer value) {
-        this.values.remove(value);
+    public void setIsPencilMark(final boolean isPencilMark) {
+        this.isPencilMark = isPencilMark;
     }
 
-    /**
-     * adds pencil mark to the cell
-     * 
-     * @param value pencil mark to add
-     */
-    public void addPencilMark(final Integer value) {
-        this.isPencilMark = true;
-        this.values.add(value);
+    public int[] getValues() {
+        return this.values.stream().mapToInt(Integer::intValue).toArray();
     }
 
     /**
@@ -101,20 +94,20 @@ public class Cell {
     }
 
     /**
-     * removes the value of a cell
-     */
-    public void unsetValue() {
-        this.values.clear();
-    }
-
-    /**
-     * sets the value of the cell and clears all pencil marks
+     * adds a value to the cell
      * 
      * @param value value to be set
      */
-    public void setValue(final int value) {
-        this.values.clear();
-        this.isPencilMark = false;
+    public void addValue(final int value) {
         this.values.add(value);
+    }
+
+    /**
+     * adds a value to the cell
+     * 
+     * @param value value to be set
+     */
+    public void removeValue(final int value) {
+        this.values.remove(value);
     }
 }
