@@ -3,6 +3,7 @@ import { SudokuService } from 'src/app/core/services/sudoku.service';
 import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { RxStompService } from '../../../rx-stomp.service';
+import { Router } from '@angular/router';
 
 @Component({
 	selector: 'app-prefill-editor',
@@ -12,7 +13,7 @@ import { RxStompService } from '../../../rx-stomp.service';
 export class PrefillEditorComponent {
 	startingGame: boolean = false;
 
-	constructor(private sudoku: SudokuService, private rxStompService: RxStompService) {
+	constructor(private sudoku: SudokuService, private rxStompService: RxStompService, private router: Router) {
 		this.sudoku.inputMethod = 'prefill';
 		this.sudoku.removeHighlights();
 		this.sudoku.enableInput();
@@ -39,16 +40,15 @@ export class PrefillEditorComponent {
 			})
 		).subscribe(id => {
 			if ((typeof id) == 'string') {
+			    this.startingGame = false;
 				console.debug(`recieved game id: ${id}`);
-				this.rxStompService.watch(`/session/broker/${id}`).subscribe(message => {
-					console.debug(message.body);
-				});
-				this.rxStompService.publish({
-					destination: `/session/handler/${id}/hello`,
-					body: 'test message'
-				})
+
+                this.router.navigate(['sudoku', id]).then(nav => {
+                    console.debug(nav);
+                }).catch(err => {
+                    console.error(err);
+                });
 			}
-			this.startingGame = false;
 		});
 	}
 }

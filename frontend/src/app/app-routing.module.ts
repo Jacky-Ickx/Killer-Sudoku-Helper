@@ -15,6 +15,10 @@ const routes: Routes = [
     loadChildren: () => import('./pages/editor/editor.module').then(m => m.EditorModule)
   },
   {
+    path: 'sudoku',
+    loadChildren: () => import('./pages/killer-sudoku/killer-sudoku.module').then(m => m.KillerSudokuModule)
+  },
+  {
     path: 'imprint',
     component: ImprintComponent
   },
