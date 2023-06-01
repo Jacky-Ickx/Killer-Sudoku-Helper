@@ -33,7 +33,7 @@ export class GridComponent {
 	}
 
 	@HostListener('document:mousedown', ['$event'])
-	onDocumentMouseDown(event: MouseEvent) { 
+	onDocumentMouseDown(event: MouseEvent) {
 		const target = event.target as HTMLElement;
 		if (!this.mouseDown && (
 			target.tagName === 'app-content-pane'.toUpperCase() || target.parentElement?.tagName === 'app-content-pane'.toUpperCase()
@@ -55,24 +55,33 @@ export class GridComponent {
 
 		const numerical: RegExp = /^[0-9]$/;
 		if (numerical.test(event.key)) {
-            this.handleNumericalKeyDown(event);
-            return;
-        }
+			this.handleNumericalKeyDown(event);
+			return;
+		}
 
-        if (['backspace', 'delete', 'c'].includes(event.key.toLowerCase())) {
-            this.handleRemoveKeyDown(event);
-            return;
-        }
+		if (['backspace', 'delete', 'c'].includes(event.key.toLowerCase())) {
+			this.handleRemoveKeyDown(event);
+			return;
+		}
+
+		if (['p'].includes(event.key.toLowerCase())) {
+			this.handlePencilMarkToggleDown(event);
+			return;
+		}
 	}
 
-    handleNumericalKeyDown(event: KeyboardEvent) {
+	handleNumericalKeyDown(event: KeyboardEvent) {
 		const value = parseInt(event.key);
 
 		if (this.sudoku.inputMethod === 'solve') this.sudoku.toggleValue(value);
 		else if (this.sudoku.inputMethod === 'prefill') this.sudoku.setValue(value);
-    }
+	}
 
-    handleRemoveKeyDown(event: KeyboardEvent) {
-        this.sudoku.deleteHighlighted();
-    }
+	handleRemoveKeyDown(event: KeyboardEvent) {
+		this.sudoku.deleteHighlighted();
+	}
+
+	handlePencilMarkToggleDown(event: KeyboardEvent) {
+		this.sudoku.togglePencilMarks();
+	}
 }

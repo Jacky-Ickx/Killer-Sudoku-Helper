@@ -16,7 +16,7 @@ public class SessionController {
     @MessageMapping("/{id}/hello")
     @SendTo("/session/broker/{id}")
     public String hello(@DestinationVariable final String id, final String message) {
-        this.logger.info(MessageFormat.format("\033[33m{0}\033[0m: {1}", id, message));
+        this.logger.info(MessageFormat.format("\033[32m{0}\033[0m: {1}", id, message));
         return MessageFormat.format("Hello there, you have joined the session with id {0}", id);
     }
 }

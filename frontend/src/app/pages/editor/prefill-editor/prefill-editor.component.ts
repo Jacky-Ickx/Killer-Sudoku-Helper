@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { SudokuService } from 'src/app/core/services/sudoku.service';
 import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
-import { RxStompService } from '../../../rx-stomp.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -13,7 +12,7 @@ import { Router } from '@angular/router';
 export class PrefillEditorComponent {
 	startingGame: boolean = false;
 
-	constructor(private sudoku: SudokuService, private rxStompService: RxStompService, private router: Router) {
+	constructor(private sudoku: SudokuService, private router: Router) {
 		this.sudoku.inputMethod = 'prefill';
 		this.sudoku.removeHighlights();
 		this.sudoku.enableInput();

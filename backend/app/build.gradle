@@ -7,94 +7,94 @@
  */
 
 plugins {
-    // Apply the application plugin to add support for building a CLI application in Java.
-    id 'application'
-    id 'java'
-    id 'jacoco'  
-    id 'org.springframework.boot' version '3.1.0'
-    id 'io.spring.dependency-management' version '1.1.0'
+	// Apply the application plugin to add support for building a CLI application in Java.
+	id 'application'
+	id 'java'
+	id 'jacoco'  
+	id 'org.springframework.boot' version '3.1.0'
+	id 'io.spring.dependency-management' version '1.1.0'
 }
 
 java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
-    }
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(17)
+	}
 }
 
 jar {
-    manifest {
-        attributes(
-            'Main-Class': 'ksh.App'
-        )
-    }
+	manifest {
+		attributes(
+			'Main-Class': 'ksh.App'
+		)
+	}
 }
 
 repositories {
-    // Use Maven Central for resolving dependencies.
-    mavenCentral()
+	// Use Maven Central for resolving dependencies.
+	mavenCentral()
 }
 
 configurations {
-    localH2Implementation.extendsFrom implementation
-    localH2RuntimeOnly.extendsFrom runtimeOnly
+	localH2Implementation.extendsFrom implementation
+	localH2RuntimeOnly.extendsFrom runtimeOnly
 }
 
 sourceSets {
-    localH2 {
-        compileClasspath += sourceSets.main.output
-        runtimeClasspath += sourceSets.main.output
-    }
+	localH2 {
+		compileClasspath += sourceSets.main.output
+		runtimeClasspath += sourceSets.main.output
+	}
 }
 
 dependencies {
-    // Use JUnit Jupiter for testing.
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.1'
-    testImplementation 'org.apache.commons:commons-collections4:4.4'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	// Use JUnit Jupiter for testing.
+	testImplementation 'org.junit.jupiter:junit-jupiter:5.9.1'
+	testImplementation 'org.apache.commons:commons-collections4:4.4'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
-    // This dependency is used by the application.
-    implementation 'com.google.guava:guava:31.1-jre'
-    implementation 'org.javatuples:javatuples:1.2'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
+	// This dependency is used by the application.
+	implementation 'com.google.guava:guava:31.1-jre'
+	implementation 'org.javatuples:javatuples:1.2'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-websocket'
-    implementation 'com.h2database:h2'
-    // implementation 'io.hypersistence:hypersistence-utils-hibernate-62:3.3.2'
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+	implementation 'com.h2database:h2'
+	// implementation 'io.hypersistence:hypersistence-utils-hibernate-62:3.3.2'
 
-    // development
-    localH2RuntimeOnly 'com.h2database:h2'
+	// development
+	localH2RuntimeOnly 'com.h2database:h2'
 }
 
 
 application {
-    // Define the main class for the application.
-    mainClass = 'ksh.App'
+	// Define the main class for the application.
+	mainClass = 'ksh.App'
 }
 
 tasks.withType(JavaCompile) {
-    options.release = 17
+	options.release = 17
 }
 
 tasks.named('run') {
-    javaLauncher = javaToolchains.launcherFor {
-        languageVersion = JavaLanguageVersion.of(17)
-    }
+	javaLauncher = javaToolchains.launcherFor {
+		languageVersion = JavaLanguageVersion.of(17)
+	}
 }
 
 task localH2(type: org.springframework.boot.gradle.tasks.run.BootRun){
-    mainClass = "ksh.App"
-    classpath = sourceSets.localH2.runtimeClasspath
+	mainClass = "ksh.App"
+	classpath = sourceSets.localH2.runtimeClasspath
 }
 
 tasks.named('test') {
-    // Use JUnit Platform for unit tests.
-    useJUnitPlatform()
-    finalizedBy jacocoTestReport // report is always generated after tests run
+	// Use JUnit Platform for unit tests.
+	useJUnitPlatform()
+	finalizedBy jacocoTestReport // report is always generated after tests run
 }
 jacocoTestReport {
-    dependsOn test // tests are required to run before generating the report
+	dependsOn test // tests are required to run before generating the report
 }
 
 tasks.withType(org.springframework.boot.gradle.tasks.run.BootRun) {
-    jvmArgs = ["-Dspring.output.ansi.enabled=ALWAYS"]
+	jvmArgs = ["-Dspring.output.ansi.enabled=ALWAYS"]
 }
