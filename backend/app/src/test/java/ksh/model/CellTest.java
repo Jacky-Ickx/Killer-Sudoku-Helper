@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.stream.IntStream;
 
 import org.apache.commons.collections4.CollectionUtils;
@@ -28,7 +29,7 @@ class CellTest {
         final Cell cell = new Cell();
         final int[] emptyArray = {};
 
-        assertTrue(cell.getValues().equals(emptyArray), "Cell should be initialized with no values");
+        assertTrue(Arrays.equals(cell.getValues(), emptyArray), "Cell should be initialized with no values");
     }
 
     @Test
@@ -37,7 +38,7 @@ class CellTest {
         final int[] arrayWith1 = { 1 };
 
         cell.addValue(1);
-        assertTrue(cell.getValues().equals(arrayWith1), "Cell should have value 1");
+        assertTrue(Arrays.equals(cell.getValues(), arrayWith1), "Cell should have value 1");
     }
 
     @Test
@@ -47,7 +48,7 @@ class CellTest {
 
         cell.addValue(1);
         cell.addValue(1);
-        assertTrue(cell.getValues().equals(arrayWith1), "Cell should not have value 1 duplicated");
+        assertTrue(Arrays.equals(cell.getValues(), arrayWith1), "Cell should not have value 1 duplicated");
     }
 
     @Test
@@ -58,7 +59,7 @@ class CellTest {
         cell.addValue(1);
         cell.addValue(9);
         cell.removeValue(9);
-        assertTrue(cell.getValues().equals(arrayWith1), "Cell should have value 1");
+        assertTrue(Arrays.equals(cell.getValues(), arrayWith1), "Cell should have value 1");
     }
 
     @Test
