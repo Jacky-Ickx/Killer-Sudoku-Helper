@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import ksh.entities.StartingGridEntity;
 import ksh.repositories.StartingGridRepository;
 import ksh.services.KillerSudokuService;
+import ksh.model.KillerSudoku;
 import ksh.model.StartingGrid;
 
 @RestController
@@ -31,8 +32,15 @@ public class GameController {
         this.repository = repository;
     }
 
+    @GetMapping(path = "/games/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public KillerSudoku getGameById(@PathVariable final String id) {
+        final KillerSudoku sudoku = this.service.getGameById(id);
+        if (sudoku == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "given id does not exist");
+        return sudoku;
+    }
+
     @GetMapping(path = "/games/{id}/startingGrid", produces = MediaType.APPLICATION_JSON_VALUE)
-    public StartingGrid getGameById(@PathVariable final String id) throws JsonProcessingException {
+    public StartingGrid getStartingGridById(@PathVariable final String id) {
         final StartingGridEntity entity = this.repository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "given id does not exist"));
         try {
             return StartingGrid.fromEntity(entity);

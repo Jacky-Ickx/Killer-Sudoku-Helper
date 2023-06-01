@@ -28,4 +28,8 @@ public class KillerSudokuService {
         this.games.put(id, new KillerSudoku(startingGrid, killerSudoku.getCages()));
         return;
     }
+
+    public KillerSudoku getGameById(final String id) {
+        return this.games.get(id);
+    }
 }

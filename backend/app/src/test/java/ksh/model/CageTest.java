@@ -138,8 +138,8 @@ class CageTest {
     void cageUniqueWhenPartiallyFilled() {
         final Cell[][] grid = emptyGrid();
 
-        grid[3][7].setValue(8);
-        grid[3][8].setValue(10);
+        grid[3][7].addValue(8);
+        grid[3][8].addValue(10);
 
         assertTrue(cage.cellsUnique(grid), "partially filled cage should be unique");
     }
@@ -148,8 +148,8 @@ class CageTest {
     void cageSumNotReachedWhenPartiallyFilled() {
         final Cell[][] grid = emptyGrid();
 
-        grid[3][7].setValue(8);
-        grid[3][8].setValue(10);
+        grid[3][7].addValue(8);
+        grid[3][8].addValue(10);
 
         assertFalse(cage.sumReached(grid), "partially filled cage should not have its sum reached");
     }
@@ -158,9 +158,9 @@ class CageTest {
     void cageUniqueWhenFilled() {
         final Cell[][] grid = emptyGrid();
 
-        grid[3][7].setValue(8);
-        grid[3][8].setValue(4);
-        grid[4][8].setValue(6);
+        grid[3][7].addValue(8);
+        grid[3][8].addValue(4);
+        grid[4][8].addValue(6);
 
         assertTrue(cage.cellsUnique(grid), "cage should be unique");
     }
@@ -169,9 +169,9 @@ class CageTest {
     void cageSumReachedWhenFilled() {
         final Cell[][] grid = emptyGrid();
 
-        grid[3][7].setValue(8);
-        grid[3][8].setValue(4);
-        grid[4][8].setValue(6);
+        grid[3][7].addValue(8);
+        grid[3][8].addValue(4);
+        grid[4][8].addValue(6);
 
         assertTrue(cage.sumReached(grid), "cage should have its sum reached");
     }
@@ -180,9 +180,9 @@ class CageTest {
     void cageNotUniqueWhenFilled() {
         final Cell[][] grid = emptyGrid();
 
-        grid[3][7].setValue(8);
-        grid[3][8].setValue(2);
-        grid[4][8].setValue(8);
+        grid[3][7].addValue(8);
+        grid[3][8].addValue(2);
+        grid[4][8].addValue(8);
 
         assertFalse(cage.cellsUnique(grid), "cage should not be unique");
     }
@@ -191,9 +191,9 @@ class CageTest {
     void cageSumReachedWhenFilled2() {
         final Cell[][] grid = emptyGrid();
 
-        grid[3][7].setValue(8);
-        grid[3][8].setValue(2);
-        grid[4][8].setValue(8);
+        grid[3][7].addValue(8);
+        grid[3][8].addValue(2);
+        grid[4][8].addValue(8);
 
         assertTrue(cage.sumReached(grid), "cage should have its sum reached");
     }
@@ -202,9 +202,9 @@ class CageTest {
     void cageUniqueWhenFilled2() {
         final Cell[][] grid = emptyGrid();
 
-        grid[3][7].setValue(8);
-        grid[3][8].setValue(4);
-        grid[4][8].setValue(9);
+        grid[3][7].addValue(8);
+        grid[3][8].addValue(4);
+        grid[4][8].addValue(9);
 
         assertTrue(cage.cellsUnique(grid), "cage should be unique");
     }
@@ -213,9 +213,9 @@ class CageTest {
     void cageSumNotReachedWhenFilled() {
         final Cell[][] grid = emptyGrid();
 
-        grid[3][7].setValue(8);
-        grid[3][8].setValue(4);
-        grid[4][8].setValue(9);
+        grid[3][7].addValue(8);
+        grid[3][8].addValue(4);
+        grid[4][8].addValue(9);
 
         assertFalse(cage.sumReached(grid), "cage should not have its sum reached");
     }

@@ -1,8 +1,6 @@
 package ksh.model;
 
 import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.HashSet;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -55,7 +53,7 @@ public class KillerSudoku {
 
         for (int y = 0; y < 9; y++) {
             for (int x = 0; x < 9; x++) {
-                this.grid[y][x].setValue(startingGrid[y][x]);
+                this.grid[y][x].addValue(startingGrid[y][x]);
             }
         }
     }
@@ -102,116 +100,11 @@ public class KillerSudoku {
      */
     public boolean checkCell(final int x, final int y) throws IllegalStateException {
         try {
-            return (this.getValue(x, y) == Cell.NO_VALUE || this.getValue(x, y) == this.solvedGrid[y][x]);
+            return (this.grid[y][x].getValue() == Cell.NO_VALUE || this.grid[y][x].getValue() == this.solvedGrid[y][x]);
         }
         catch (final NullPointerException e) {
             throw new IllegalStateException(e);
         }
-    }
-
-    /**
-     * gets all possible values of a given cell
-     * 
-     * @param x horizontal index of cell
-     * @param y vertical index of cell
-     * @return possible values
-     */
-    public ArrayList<Integer> getPossibleValues(final int x, final int y) {
-        return this.grid[y][x].getPossibleValues();
-    }
-
-    /**
-     * sets possible values of a given cell to all values from 1-9
-     * 
-     * @param x horizontal index of cell
-     * @param y vertical index of cell
-     */
-    public void resetPossibleValues(final int x, final int y) {
-        this.grid[y][x].resetPossibleValues();
-    }
-
-    /**
-     * removes a possible value from a given cell
-     * 
-     * @param x     horizontal index of cell
-     * @param y     vertical index of cell
-     * @param value value to remove from possibilities
-     */
-    public void removePossibleValue(final int x, final int y, final Integer value) {
-        this.grid[y][x].removePossibleValue(value);
-    }
-
-    /**
-     * gets all pencil marks of a given cell
-     * 
-     * @param x horizontal index of cell
-     * @param y vertical index of cell
-     * @return pencil marks
-     */
-    public HashSet<Integer> getPencilMarks(final int x, final int y) {
-        return this.grid[y][x].getPencilMarks();
-    }
-
-    /**
-     * removes a pencil mark from a given cell <br>
-     * returns early if the indicated cell is given in the starting grid
-     * 
-     * @param x     horizontal index of cell
-     * @param y     vertical index of cell
-     * @param value pencil mark to remove
-     */
-    public void removePencilMark(final int x, final int y, final Integer value) {
-        if (this.startingGrid != null && this.startingGrid[y][x] != Cell.NO_VALUE) return;
-        this.grid[y][x].removePencilMark(value);
-    }
-
-    /**
-     * adds pencil mark to a given cell <br>
-     * returns early if the indicated cell is given in the starting grid
-     * 
-     * @param x     horizontal index of cell
-     * @param y     vertical index of cell
-     * @param value pencil mark to add
-     */
-    public void addPencilMark(final int x, final int y, final Integer value) {
-        if (this.startingGrid != null && this.startingGrid[y][x] != Cell.NO_VALUE) return;
-        this.grid[y][x].addPencilMark(value);
-    }
-
-    /**
-     * gets value of a given cell
-     * 
-     * @param x horizontal index of cell
-     * @param y vertical index of cell
-     * @return value
-     */
-    public int getValue(final int x, final int y) {
-        return this.grid[y][x].getValue();
-    }
-
-    /**
-     * removes the value of a cell <br>
-     * returns early if the indicated cell is given in the starting grid
-     * 
-     * @param x horizontal index of cell
-     * @param y vertical index of cell
-     */
-    public void unsetValue(final int x, final int y) {
-        if (this.startingGrid != null && this.startingGrid[y][x] != Cell.NO_VALUE) return;
-        this.grid[y][x].unsetValue();
-    }
-
-    /**
-     * sets the value of a given cell <br>
-     * returns early if the indicated cell is given in the starting grid
-     * 
-     * @param x     horizontal index of cell
-     * @param y     vertical index of cell
-     * @param value value to be set
-     */
-    public void setValue(final int x, final int y, final int value) {
-        if (this.startingGrid != null && this.startingGrid[y][x] != Cell.NO_VALUE) return;
-        this.grid[y][x].setValue(value);
     }
 
     /**

@@ -33,6 +33,7 @@ public final class Strategies {
 
     }
 
+    @SuppressWarnings("unchecked")
     private static Step ruleOf45(final Cage[] cages, final Cell[][] grid) {
         final Pair<Integer, List<Position>>[] rows = new Pair[9];
         final Pair<Integer, List<Position>>[] columns = new Pair[9];
