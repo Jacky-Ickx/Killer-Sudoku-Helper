@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-content-pane',
@@ -6,5 +6,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./content-pane.component.scss']
 })
 export class ContentPaneComponent {
-
+    @Input() centered: boolean = false;
 }
