@@ -16,19 +16,19 @@ export class SudokuService {
 	private inputDisabled: boolean = false;
 	public inputMethod: 'prefill' | 'solve' = 'solve';
 
-    private basePath = `${environment.protocol}://${environment.backend_url}`;
+	private basePath = `${environment.protocol}://${environment.backend_url}`;
 
 	possibleSums = [
-        [ 1, 9 ],
-        [ 3, 17 ],
-        [ 6, 24 ],
-        [ 10, 30 ],
-        [ 15, 35 ],
-        [ 21, 39 ],
-        [ 28, 42 ],
-        [ 36, 44 ],
-        [ 45, 45 ]
-    ];
+		[1, 9],
+		[3, 17],
+		[6, 24],
+		[10, 30],
+		[15, 35],
+		[21, 39],
+		[28, 42],
+		[36, 44],
+		[45, 45]
+	];
 
 	constructor(private httpClient: HttpClient) {
 		this.resetState();
@@ -89,25 +89,41 @@ export class SudokuService {
 		if (this.inputDisabled || this.inputMethod !== 'solve') return;
 
 		const add_value: boolean = this.highlightedCells.some(coordinates => {
-            return !this.grid[coordinates.y][coordinates.x].values.includes(value);
+			return !this.grid[coordinates.y][coordinates.x].values.includes(value);
 		})
 
 		this.highlightedCells.forEach(coordinates => {
-            const cell = this.grid[coordinates.y][coordinates.x]
-			if(!add_value) {
-				let newValues = ([] as number[]).concat(...cell.values)
-				newValues = newValues.filter(item => item !== value);
-				
-				cell.values = newValues; // this is angular change detection bullshit
+			const cell = this.grid[coordinates.y][coordinates.x]
+			if (!add_value) {
+				this.removeValueFromCell(cell, value);
 			}
-			else if(!cell.values.includes(value)) {
-				let newValues = ([] as number[]).concat(...cell.values)
-				newValues.push(value);
-				newValues.sort();
-
-				cell.values = newValues; // this is angular change detection bullshit
+			else if (!cell.values.includes(value)) {
+				this.addValueToCell(cell, value);
 			}
 		});
+	}
+
+	addValueToCell(cell: CellContent, value: number) {
+		let newValues = ([] as number[]).concat(...cell.values);
+		newValues.push(value);
+		newValues.sort();
+
+		cell.values = newValues; // this is angular change detection bullshit
+
+		if (this.highlightedCells.length > 1) {
+			cell.isPencilMark = true;
+		}
+	}
+
+	removeValueFromCell(cell: CellContent, value: number) {
+		let newValues = ([] as number[]).concat(...cell.values)
+		newValues = newValues.filter(item => item !== value);
+
+		cell.values = newValues; // this is angular change detection bullshit
+
+		if (this.highlightedCells.length == 1 && cell.values.length == 1) {
+			cell.isPencilMark = false;
+		}
 	}
 
 	setValue(value: number) {
@@ -118,16 +134,28 @@ export class SudokuService {
 		});
 	}
 
-    deleteHighlighted() {
-        this.highlightedCells.forEach(coordinates => {
+	togglePencilMarks() {
+		if (this.inputDisabled || this.inputMethod !== 'solve') return;
+
+		const setPencilmark: boolean = this.highlightedCells.some(coordinates => {
+			return !this.grid[coordinates.y][coordinates.x].isPencilMark;
+		})
+
+		this.highlightedCells.forEach(coordinates => {
+			this.grid[coordinates.y][coordinates.x].isPencilMark = setPencilmark;
+		});
+	}
+
+	deleteHighlighted() {
+		this.highlightedCells.forEach(coordinates => {
 			this.grid[coordinates.y][coordinates.x].values = [];
 		});
-    }
+	}
 
 	async cageFromHighlighted(sum: number): Promise<void> {
-		if (this.highlightedCells.length < 1 || this.highlightedCells.length > 9) throw new Error('invalid amount of cells selected'); 
-		if (sum < this.possibleSums[this.highlightedCells.length-1][0] || 
-			sum > this.possibleSums[this.highlightedCells.length-1][1]) throw new Error('sum invalid for selected amount of cells');
+		if (this.highlightedCells.length < 1 || this.highlightedCells.length > 9) throw new Error('invalid amount of cells selected');
+		if (sum < this.possibleSums[this.highlightedCells.length - 1][0] ||
+			sum > this.possibleSums[this.highlightedCells.length - 1][1]) throw new Error('sum invalid for selected amount of cells');
 
 		if (this.highlightedCells.some(coordinates => {
 			return this.grid[coordinates.y][coordinates.x].cage.inCage;
@@ -147,25 +175,25 @@ export class SudokuService {
 		let highestCell = 9;
 		let leftmostHighest = 9;
 
-        /* get adjacencies */
+		/* get adjacencies */
 		cage.cells.forEach(cell => {
 			cell['adjacency'] = {
-				top: cage.cells.some(position => position.y === cell.y-1 && position.x === cell.x),
-				right: cage.cells.some(position => position.y === cell.y && position.x === cell.x+1),
-				bottom: cage.cells.some(position => position.y === cell.y+1 && position.x === cell.x),
-				left: cage.cells.some(position => position.y === cell.y && position.x === cell.x-1),
-				topRight: cage.cells.some(position => position.y === cell.y-1 && position.x === cell.x+1),
-				bottomRight: cage.cells.some(position => position.y === cell.y+1 && position.x === cell.x+1),
-				bottomLeft: cage.cells.some(position => position.y === cell.y+1 && position.x === cell.x-1),
-				topLeft: cage.cells.some(position => position.y === cell.y-1 && position.x === cell.x-1),
+				top: cage.cells.some(position => position.y === cell.y - 1 && position.x === cell.x),
+				right: cage.cells.some(position => position.y === cell.y && position.x === cell.x + 1),
+				bottom: cage.cells.some(position => position.y === cell.y + 1 && position.x === cell.x),
+				left: cage.cells.some(position => position.y === cell.y && position.x === cell.x - 1),
+				topRight: cage.cells.some(position => position.y === cell.y - 1 && position.x === cell.x + 1),
+				bottomRight: cage.cells.some(position => position.y === cell.y + 1 && position.x === cell.x + 1),
+				bottomLeft: cage.cells.some(position => position.y === cell.y + 1 && position.x === cell.x - 1),
+				topLeft: cage.cells.some(position => position.y === cell.y - 1 && position.x === cell.x - 1),
 			}
 		});
-		
+
 		if (cage.cells.length > 1 &&
-			cage.cells.some(cell => !cell['adjacency'].top && !cell['adjacency'].right && !cell['adjacency'].bottom && !cell['adjacency'].left)) 
+			cage.cells.some(cell => !cell['adjacency'].top && !cell['adjacency'].right && !cell['adjacency'].bottom && !cell['adjacency'].left))
 			throw new Error('cells of a cage need to be adjacent to at least one other cell');
 
-        /* construct new grid[y][x].cage values */
+		/* construct new grid[y][x].cage values */
 		cage.cells.forEach(cell => {
 			this.grid[cell.y][cell.x].cage = {
 				inCage: true,
@@ -191,26 +219,26 @@ export class SudokuService {
 		this.grid[highestCell][leftmostHighest].cage.sum = cage.sum;
 	}
 
-    sendAsStartingGrid(): Observable<string> {
-        const startingGrid: number[][] = []
-        this.grid.forEach(row => {
-            startingGrid.push(
-                row.map(cell => cell.values.length > 0? cell.values[0] : 0)
-            );
-        });
-        this.cages.forEach(cage => {
-            cage.cells.forEach(cell => {
-                delete cell['adjacency']
-            })
-        })
+	sendAsStartingGrid(): Observable<string> {
+		const startingGrid: number[][] = []
+		this.grid.forEach(row => {
+			startingGrid.push(
+				row.map(cell => cell.values.length > 0 ? cell.values[0] : 0)
+			);
+		});
+		this.cages.forEach(cage => {
+			cage.cells.forEach(cell => {
+				delete cell['adjacency']
+			})
+		})
 
-        return this.httpClient.post(
-            `${this.basePath}/games`,
-            {
-                grid: startingGrid,
-                cages: this.cages
-            },
-            {responseType: 'text'}
-        );
-    }
+		return this.httpClient.post(
+			`${this.basePath}/games`,
+			{
+				grid: startingGrid,
+				cages: this.cages
+			},
+			{ responseType: 'text' }
+		);
+	}
 }
