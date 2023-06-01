@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { SudokuService } from 'src/app/core/services/sudoku.service';
+import { SudokuService } from 'src/app/core/services/sudoku/sudoku.service';
 
 @Component({
 	selector: 'app-cage-editor',

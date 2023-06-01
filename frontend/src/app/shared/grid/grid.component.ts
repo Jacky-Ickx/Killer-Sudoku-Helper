@@ -1,5 +1,5 @@
 import { Component, HostListener } from '@angular/core';
-import { SudokuService } from 'src/app/core/services/sudoku.service';
+import { SudokuService } from 'src/app/core/services/sudoku/sudoku.service';
 import { CellContent } from 'src/app/models/cell.model';
 import { Coordinates } from 'src/app/models/coordinates.model';
 

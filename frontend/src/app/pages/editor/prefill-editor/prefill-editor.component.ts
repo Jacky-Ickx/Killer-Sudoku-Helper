@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
-import { SudokuService } from 'src/app/core/services/sudoku.service';
+import { SudokuService } from 'src/app/core/services/sudoku/sudoku.service';
 import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { Router } from '@angular/router';
+import { SudokuApiService } from '../../../core/services/sudoku-api/sudoku-api.service';
 
 @Component({
 	selector: 'app-prefill-editor',
@@ -12,7 +13,7 @@ import { Router } from '@angular/router';
 export class PrefillEditorComponent {
 	startingGame: boolean = false;
 
-	constructor(private sudoku: SudokuService, private router: Router) {
+	constructor(private sudoku: SudokuService, private api: SudokuApiService, private router: Router) {
 		this.sudoku.inputMethod = 'prefill';
 		this.sudoku.removeHighlights();
 		this.sudoku.enableInput();
@@ -21,13 +22,13 @@ export class PrefillEditorComponent {
 	onFinishClick() {
 		this.startingGame = true;
 		console.debug(`sending starting grid`)
-		this.sudoku.sendAsStartingGrid().pipe(
+		this.api.sendAsStartingGrid().pipe(
 			catchError(error => {
 				let errorMsg: string;
 
 				if (error.error instanceof ErrorEvent) {
 					errorMsg = `${error.error.message}`;
-				} 
+				}
 				else {
 					errorMsg = `${JSON.parse(error.error).message}`;
 				}
@@ -39,14 +40,14 @@ export class PrefillEditorComponent {
 			})
 		).subscribe(id => {
 			if ((typeof id) == 'string') {
-			    this.startingGame = false;
+				this.startingGame = false;
 				console.debug(`recieved game id: ${id}`);
 
-                this.router.navigate(['sudoku', id]).then(nav => {
-                    console.debug(nav);
-                }).catch(err => {
-                    console.error(err);
-                });
+				this.router.navigate(['sudoku', id]).then(nav => {
+					console.debug(nav);
+				}).catch(err => {
+					console.error(err);
+				});
 			}
 		});
 	}

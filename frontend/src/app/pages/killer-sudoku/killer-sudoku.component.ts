@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { IMessage } from '@stomp/rx-stomp';
-import { SudokuService } from 'src/app/core/services/sudoku.service';
+import { SudokuService } from 'src/app/core/services/sudoku/sudoku.service';
 import { RxStompService } from 'src/app/rx-stomp.service';
 
 @Component({
