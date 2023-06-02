@@ -105,11 +105,11 @@ export class SudokuService {
 			const cell = this.grid[coordinates.y][coordinates.x]
 			if (!addValue) {
 				action.cells.push(coordinates);
-				this.removeValueFromCell(cell, value);
+				if(!sendAction)this.removeValueFromCell(cell, value);
 			}
 			else if (!cell.values.includes(value)) {
 				action.cells.push(coordinates);
-				this.addValueToCell(cell, value);
+				if(!sendAction)this.addValueToCell(cell, value);
 			}
 		});
 
@@ -154,10 +154,6 @@ export class SudokuService {
 			return !this.grid[coordinates.y][coordinates.x].isPencilMark;
 		});
 
-		this.highlightedCells.forEach(coordinates => {
-			this.grid[coordinates.y][coordinates.x].isPencilMark = setPencilmark!;
-		});
-
 		if (sendAction) {
 			let action: ActionMessage = {
 				actionType: (setPencilmark) ? 'setPencilMarks' : 'removePencilMarks',
@@ -167,13 +163,12 @@ export class SudokuService {
 
 			this.actions.next(action);
 		}
+		else this.highlightedCells.forEach(coordinates => {
+			this.grid[coordinates.y][coordinates.x].isPencilMark = setPencilmark!;
+		});
 	}
 
 	deleteHighlighted(sendAction: boolean = this.sendActions) {
-		this.highlightedCells.forEach(coordinates => {
-			this.grid[coordinates.y][coordinates.x].values = [];
-		});
-
 		if (sendAction) {
 			let action: ActionMessage = {
 				actionType: 'deleteValues',
@@ -183,6 +178,9 @@ export class SudokuService {
 
 			this.actions.next(action);
 		}
+		else this.highlightedCells.forEach(coordinates => {
+			this.grid[coordinates.y][coordinates.x].values = [];
+		});
 	}
 
 	async cageFromHighlighted(sum: number): Promise<void> {
