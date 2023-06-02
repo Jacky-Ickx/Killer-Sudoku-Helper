@@ -88,15 +88,15 @@ export class SudokuService {
 		this.inputDisabled = false;
 	}
 
-	toggleValue(value: number, sendAction: boolean = this.sendActions) {
+	toggleValue(value: number, sendAction: boolean = this.sendActions, addValue: boolean | null = null) {
 		if (this.inputDisabled || this.inputMethod !== 'solve') return;
 
-		const addValue: boolean = this.highlightedCells.some(coordinates => {
+		if (addValue === null) addValue = this.highlightedCells.some(coordinates => {
 			return !this.grid[coordinates.y][coordinates.x].values.includes(value);
-		})
+		});
 
 		let action: ActionMessage = {
-			actionType: (addValue)? 'addValue' : 'removeValue',
+			actionType: (addValue) ? 'addValue' : 'removeValue',
 			cells: [],
 			value: value
 		}
@@ -134,7 +134,7 @@ export class SudokuService {
 
 		cell.values = newValues; // this is angular change detection bullshit
 
-		if (this.highlightedCells.length == 1 && cell.values.length == 1) {
+		if (this.highlightedCells.length === 1 && cell.values.length === 1) {
 			cell.isPencilMark = false;
 		}
 	}
@@ -147,20 +147,20 @@ export class SudokuService {
 		});
 	}
 
-	togglePencilMarks(sendAction: boolean = this.sendActions) {
+	togglePencilMarks(sendAction: boolean = this.sendActions, setPencilmark: boolean | null = null) {
 		if (this.inputDisabled || this.inputMethod !== 'solve') return;
 
-		const setPencilmark: boolean = this.highlightedCells.some(coordinates => {
+		if (setPencilmark === null) setPencilmark = this.highlightedCells.some(coordinates => {
 			return !this.grid[coordinates.y][coordinates.x].isPencilMark;
-		})
+		});
 
 		this.highlightedCells.forEach(coordinates => {
-			this.grid[coordinates.y][coordinates.x].isPencilMark = setPencilmark;
+			this.grid[coordinates.y][coordinates.x].isPencilMark = setPencilmark!;
 		});
 
 		if (sendAction) {
 			let action: ActionMessage = {
-				actionType: (setPencilmark)? 'setPencilMarks' : 'removePencilMarks',
+				actionType: (setPencilmark) ? 'setPencilMarks' : 'removePencilMarks',
 				cells: this.highlightedCells,
 				value: 0
 			}
@@ -261,6 +261,44 @@ export class SudokuService {
 				this.grid[y][x].values = cell.values;
 				this.grid[y][x].isPencilMark = cell.isPencilMark;
 			});
+		});
+	}
+
+	applyAction(action: ActionMessage) {
+		const tempSave = this.highlightedCells;
+		this.removeHighlights();
+		action.cells.forEach(cell => {
+			this.highlightCell(cell);
+		});
+
+		switch (action.actionType) {
+			case 'addValue':
+				this.toggleValue(action.value, false, true);
+				break;
+
+			case 'removeValue':
+				this.toggleValue(action.value, false, false);
+				break;
+
+			case 'setPencilMarks':
+				this.togglePencilMarks(false, true);
+				break;
+
+			case 'removePencilMarks':
+				this.togglePencilMarks(false, false);
+				break;
+
+			case 'deleteValues':
+				this.deleteHighlighted(false);
+				break;
+
+			default:
+				break;
+		}
+
+		this.removeHighlights();
+		tempSave.forEach(cell => {
+			this.highlightCell(cell);
 		});
 	}
 }

@@ -91,8 +91,8 @@ export class SudokuApiService {
 		});
 
 		this.rxStompService.watch(`/session/broker/${id}`).subscribe(message => this.handlePlainMessage(message));
-		this.rxStompService.watch(`/session/broker/${id}/actions`).subscribe(message => this.handleJsonMessage(message));
-		this.rxStompService.watch(`/session/broker/${id}/error`).subscribe(message => this.handleJsonMessage(message, true));
+		this.rxStompService.watch(`/session/broker/${id}/actions`).subscribe(message => this.handleActionsMessage(message));
+		this.rxStompService.watch(`/session/broker/${id}/error`).subscribe(message => this.handleErrorMessage(message));
 
 		this.rxStompService.publish({
 			destination: `/session/handler/${id}/hello`,
@@ -104,9 +104,13 @@ export class SudokuApiService {
 		console.debug(message.body);
 	}
 
-	handleJsonMessage(message: IMessage, isError:boolean = false) {
-		if(isError) console.error(JSON.parse(message.body));
-		else console.debug(JSON.parse(message.body));
+	handleActionsMessage(message: IMessage) {
+		console.debug(JSON.parse(message.body));
+		this.sudoku.applyAction(JSON.parse(message.body));
+	}
+
+	handleErrorMessage(message: IMessage) {
+		console.error(JSON.parse(message.body));
 	}
 }
 
