@@ -74,6 +74,11 @@ public class Cell {
 		this.isPencilMark = isPencilMark;
 	}
 
+	/**
+	 * get all values of this cell
+	 * 
+	 * @return values of cell
+	 */
 	public int[] getValues() {
 		return this.values.stream().mapToInt(Integer::intValue).toArray();
 	}
