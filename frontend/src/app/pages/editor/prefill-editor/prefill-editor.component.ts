@@ -34,13 +34,13 @@ export class PrefillEditorComponent {
 				}
 
 				console.error(errorMsg);
-				this.startingGame = false;
 
 				return of([]);
 			})
 		).subscribe(id => {
+			this.startingGame = false;
+
 			if ((typeof id) == 'string') {
-				this.startingGame = false;
 				console.debug(`recieved game id: ${id}`);
 
 				this.router.navigate(['sudoku', id]).then(nav => {

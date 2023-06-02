@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Cage } from 'src/app/models/cage.model';
 import { CellContent } from 'src/app/models/cell.model';
 import { Coordinates } from 'src/app/models/coordinates.model';
+import { KillerSudoku } from 'src/app/models/KillerSudoku.model';
 
 @Injectable({
 	providedIn: 'root',
@@ -212,5 +213,17 @@ export class SudokuService {
 		});
 
 		this.grid[highestCell][leftmostHighest].cage.sum = cage.sum;
+	}
+
+	applyState(sudoku: KillerSudoku) {
+		this.cages.splice(0, this.cages.length, ...sudoku.cages);
+		this.cages.forEach(cage => this.constructCage(cage));
+
+		sudoku.grid.forEach((row, y) => {
+			row.forEach((cell, x) => {
+				this.grid[y][x].values = cell.values.filter(value => value > 0);
+				this.grid[y][x].isPencilMark = cell.isPencilMark;
+			});
+		});
 	}
 }

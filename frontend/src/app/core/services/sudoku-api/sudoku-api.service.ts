@@ -1,8 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { catchError } from 'rxjs/operators';
 import { Observable } from 'rxjs/internal/Observable';
 import { environment } from 'src/environments/environment';
 import { SudokuService } from '../sudoku/sudoku.service';
+import { of } from 'rxjs';
+import { Router } from '@angular/router';
+import { KillerSudoku } from 'src/app/models/KillerSudoku.model';
 
 @Injectable({
 	providedIn: 'root'
@@ -10,7 +14,7 @@ import { SudokuService } from '../sudoku/sudoku.service';
 export class SudokuApiService {
 	private basePath = `${environment.protocol}://${environment.backend_url}`;
 
-	constructor(private sudoku: SudokuService, private httpClient: HttpClient) { }
+	constructor(private sudoku: SudokuService, private httpClient: HttpClient, private router: Router) { }
 
 	sendAsStartingGrid(): Observable<string> {
 		const startingGrid: number[][] = []
@@ -34,4 +38,36 @@ export class SudokuApiService {
 			{ responseType: 'text' }
 		);
 	}
+
+	applyCurrentState(id: string) {
+		console.debug(`requesting state for ${id}`)
+
+		this.httpClient.get<KillerSudoku>(`${this.basePath}/games/${id}`).pipe(
+			catchError(error => {
+				let errorMsg: string;
+
+				if (error.error instanceof ErrorEvent) {
+					errorMsg = `${error.error.message}`;
+				}
+				else {
+					errorMsg = `${error.message}`;
+				}
+
+				console.error(errorMsg);
+
+				return of(null);
+			})
+		).subscribe((sudoku: KillerSudoku | null) => {
+			if (sudoku === null) {
+				this.router.navigate(['404']).then(nav => {
+					console.debug(nav);
+				}).catch(err => {
+					console.error(err);
+				});
+			}
+
+			this.sudoku.applyState(sudoku!);
+		});;
+	}
 }
+
