@@ -6,7 +6,9 @@ import { environment } from 'src/environments/environment';
 import { SudokuService } from '../sudoku/sudoku.service';
 import { of } from 'rxjs';
 import { Router } from '@angular/router';
-import { KillerSudoku } from 'src/app/models/KillerSudoku.model';
+import { KillerSudoku } from 'src/app/models/killer-sudoku.model';
+import { IMessage } from '@stomp/rx-stomp';
+import { RxStompService } from 'src/app/rx-stomp.service';
 
 @Injectable({
 	providedIn: 'root'
@@ -14,7 +16,12 @@ import { KillerSudoku } from 'src/app/models/KillerSudoku.model';
 export class SudokuApiService {
 	private basePath = `${environment.protocol}://${environment.backend_url}`;
 
-	constructor(private sudoku: SudokuService, private httpClient: HttpClient, private router: Router) { }
+	constructor(
+		private sudoku: SudokuService, 
+		private httpClient: HttpClient, 
+		private router: Router,
+		private rxStompService: RxStompService
+	) { }
 
 	sendAsStartingGrid(): Observable<string> {
 		const startingGrid: number[][] = []
@@ -67,7 +74,39 @@ export class SudokuApiService {
 			}
 
 			this.sudoku.applyState(sudoku!);
+
+			this.joinSession(id);
 		});;
+	}
+
+	joinSession(id: string) {
+		this.sudoku.sendActions = true;
+		this.sudoku.actions.subscribe((action) => {
+			console.log(action);
+
+			this.rxStompService.publish({
+				destination: `/session/handler/${id}/action`,
+				body: JSON.stringify(action)
+			});
+		});
+
+		this.rxStompService.watch(`/session/broker/${id}`).subscribe(message => this.handlePlainMessage(message));
+		this.rxStompService.watch(`/session/broker/${id}/actions`).subscribe(message => this.handleJsonMessage(message));
+		this.rxStompService.watch(`/session/broker/${id}/error`).subscribe(message => this.handleJsonMessage(message, true));
+
+		this.rxStompService.publish({
+			destination: `/session/handler/${id}/hello`,
+			body: 'test message'
+		});
+	}
+
+	handlePlainMessage(message: IMessage) {
+		console.debug(message.body);
+	}
+
+	handleJsonMessage(message: IMessage, isError:boolean = false) {
+		if(isError) console.error(JSON.parse(message.body));
+		else console.debug(JSON.parse(message.body));
 	}
 }
 

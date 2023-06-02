@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs';
 import { Cage } from 'src/app/models/cage.model';
 import { CellContent } from 'src/app/models/cell.model';
 import { Coordinates } from 'src/app/models/coordinates.model';
-import { KillerSudoku } from 'src/app/models/KillerSudoku.model';
+import { KillerSudoku } from 'src/app/models/killer-sudoku.model';
+import { ActionMessage } from '../../../models/action-message.model';
 
 @Injectable({
 	providedIn: 'root',
@@ -13,6 +15,9 @@ export class SudokuService {
 	public highlightedCells: Coordinates[] = [];
 	private inputDisabled: boolean = false;
 	public inputMethod: 'prefill' | 'solve' = 'solve';
+
+	public sendActions: boolean = false;
+	public actions = new Subject<ActionMessage>();
 
 	possibleSums = [
 		[1, 9],
@@ -58,6 +63,8 @@ export class SudokuService {
 		this.highlightedCells = [];
 		this.inputDisabled = false;
 		this.inputMethod = 'solve';
+
+		this.sendActions = false;
 	}
 
 	removeHighlights() {
@@ -81,22 +88,32 @@ export class SudokuService {
 		this.inputDisabled = false;
 	}
 
-	toggleValue(value: number) {
+	toggleValue(value: number, sendAction: boolean = this.sendActions) {
 		if (this.inputDisabled || this.inputMethod !== 'solve') return;
 
-		const add_value: boolean = this.highlightedCells.some(coordinates => {
+		const addValue: boolean = this.highlightedCells.some(coordinates => {
 			return !this.grid[coordinates.y][coordinates.x].values.includes(value);
 		})
 
+		let action: ActionMessage = {
+			actionType: (addValue)? 'addValue' : 'removeValue',
+			cells: [],
+			value: value
+		}
+
 		this.highlightedCells.forEach(coordinates => {
 			const cell = this.grid[coordinates.y][coordinates.x]
-			if (!add_value) {
+			if (!addValue) {
+				action.cells.push(coordinates);
 				this.removeValueFromCell(cell, value);
 			}
 			else if (!cell.values.includes(value)) {
+				action.cells.push(coordinates);
 				this.addValueToCell(cell, value);
 			}
 		});
+
+		if (sendAction) this.actions.next(action);
 	}
 
 	addValueToCell(cell: CellContent, value: number) {
@@ -130,7 +147,7 @@ export class SudokuService {
 		});
 	}
 
-	togglePencilMarks() {
+	togglePencilMarks(sendAction: boolean = this.sendActions) {
 		if (this.inputDisabled || this.inputMethod !== 'solve') return;
 
 		const setPencilmark: boolean = this.highlightedCells.some(coordinates => {
@@ -140,12 +157,32 @@ export class SudokuService {
 		this.highlightedCells.forEach(coordinates => {
 			this.grid[coordinates.y][coordinates.x].isPencilMark = setPencilmark;
 		});
+
+		if (sendAction) {
+			let action: ActionMessage = {
+				actionType: (setPencilmark)? 'setPencilMarks' : 'removePencilMarks',
+				cells: this.highlightedCells,
+				value: 0
+			}
+
+			this.actions.next(action);
+		}
 	}
 
-	deleteHighlighted() {
+	deleteHighlighted(sendAction: boolean = this.sendActions) {
 		this.highlightedCells.forEach(coordinates => {
 			this.grid[coordinates.y][coordinates.x].values = [];
 		});
+
+		if (sendAction) {
+			let action: ActionMessage = {
+				actionType: 'deleteValues',
+				cells: this.highlightedCells,
+				value: 0
+			}
+
+			this.actions.next(action);
+		}
 	}
 
 	async cageFromHighlighted(sum: number): Promise<void> {
