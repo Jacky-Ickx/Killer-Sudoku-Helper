@@ -109,6 +109,65 @@ public class KillerSudoku {
 	}
 
 	/**
+	 * adds Value to selected cells
+	 * 
+	 * @param cells list of selected cells
+	 * @param value value to add
+	 */
+	public void addValue(final Position[] cells, final Integer value) {
+		for (final var cell : cells) {
+			this.grid[cell.y][cell.x].addValue(value);
+		}
+	}
+
+	/**
+	 * removes Value from selected cells
+	 * 
+	 * @param cells list of selected cells
+	 * @param value value to remove
+	 */
+	public void removeValue(final Position[] cells, final Integer value) {
+		for (final var cell : cells) {
+			this.grid[cell.y][cell.x].removeValue(value);
+		}
+	}
+
+	/**
+	 * sets isPencilMark to true for selected cells
+	 * 
+	 * @param cells list of selected cells
+	 */
+	public void setPencilMarks(final Position[] cells) {
+		for (final var cell : cells) {
+			this.grid[cell.y][cell.x].setIsPencilMark(true);
+			;
+		}
+	}
+
+	/**
+	 * sets isPencilMark to false for selected cells
+	 * 
+	 * @param cells list of selected cells
+	 */
+	public void removePencilMarks(final Position[] cells) {
+		for (final var cell : cells) {
+			this.grid[cell.y][cell.x].setIsPencilMark(false);
+			;
+		}
+	}
+
+	/**
+	 * removes all Values from selected cells
+	 * 
+	 * @param cells list of selected cells
+	 */
+	public void deleteValues(final Position[] cells) {
+		for (final var cell : cells) {
+			this.grid[cell.y][cell.x].deleteValues();
+		}
+	}
+
+	/**
 	 * gets all Positions where the starting grid has a value other than NO_VALUE
 	 * 
 	 * @return list of Positions

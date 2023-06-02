@@ -114,6 +114,13 @@ export class SudokuService {
 		});
 
 		if (sendAction) this.actions.next(action);
+		if (sendAction && this.highlightedCells.length > 1) {
+			this.actions.next({
+				actionType: 'setPencilMarks',
+				cells: action.cells,
+				value: 0
+			})
+		}
 	}
 
 	addValueToCell(cell: CellContent, value: number) {

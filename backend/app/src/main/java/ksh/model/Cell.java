@@ -104,11 +104,18 @@ public class Cell {
 	}
 
 	/**
-	 * adds a value to the cell
+	 * removes a value from the cell
 	 * 
-	 * @param value value to be set
+	 * @param value value to remove
 	 */
 	public void removeValue(final int value) {
 		this.values.remove(value);
+	}
+
+	/**
+	 * removes all values from cell
+	 */
+	public void deleteValues() {
+		this.values.clear();
 	}
 }

@@ -46,21 +46,40 @@ public class SessionController {
 
 	@MessageMapping("/{id}/action")
 	@SendTo("/session/broker/{id}/actions")
-	public ActionMessage handleAction(@DestinationVariable final String id, final ActionMessage message) {
-		if (!this.logAndCheckID(id, "action", message)) return null;
+	public ActionMessage handleAction(@DestinationVariable final String id, final ActionMessage action) {
+		if (!this.logAndCheckID(id, "action", action)) return null;
 
 		final var sudoku = this.service.getGameById(id);
 
-		final var validList = new ArrayList<Position>(Arrays.asList(message.getCells()));
+		final var validList = new ArrayList<Position>(Arrays.asList(action.getCells()));
 		for (final var position : sudoku.getStartingGridPositions()) {
 			validList.remove(position);
 		}
-		message.setCells(validList.toArray(Position[]::new));
+		action.setCells(validList.toArray(Position[]::new));
 
-		switch (message.getActionType()) {
+		switch (action.getActionType()) {
+		case "addValue":
+			sudoku.addValue(action.getCells(), action.getValue());
+			break;
+
+		case "removeValue":
+			sudoku.removeValue(action.getCells(), action.getValue());
+			break;
+
+		case "setPencilMarks":
+			sudoku.setPencilMarks(action.getCells());
+			break;
+
+		case "removePencilMarks":
+			sudoku.removePencilMarks(action.getCells());
+			break;
+
+		case "deleteValues":
+			sudoku.deleteValues(action.getCells());
+			break;
 		default:
 			break;
 		}
-		return message;
+		return action;
 	}
 }
