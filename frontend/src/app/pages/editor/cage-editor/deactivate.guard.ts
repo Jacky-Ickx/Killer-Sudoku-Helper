@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { ActivatedRouteSnapshot, CanDeactivate, RouterStateSnapshot, UrlTree } from "@angular/router";
 import { CageEditorComponent } from "./cage-editor.component";
-import { SudokuService } from "src/app/core/services/sudoku.service";
+import { SudokuService } from "src/app/core/services/sudoku/sudoku.service";
 import { Observable } from "rxjs";
 import { CellContent } from "src/app/models/cell.model";
 
