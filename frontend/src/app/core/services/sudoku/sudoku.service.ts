@@ -221,7 +221,7 @@ export class SudokuService {
 
 		sudoku.grid.forEach((row, y) => {
 			row.forEach((cell, x) => {
-				this.grid[y][x].values = cell.values.filter(value => value > 0);
+				this.grid[y][x].values = cell.values;
 				this.grid[y][x].isPencilMark = cell.isPencilMark;
 			});
 		});
