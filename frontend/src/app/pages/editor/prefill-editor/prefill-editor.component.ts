@@ -40,7 +40,7 @@ export class PrefillEditorComponent {
 		).subscribe(id => {
 			this.startingGame = false;
 
-			if ((typeof id) == 'string') {
+			if ((typeof id) === 'string') {
 				console.debug(`recieved game id: ${id}`);
 
 				this.router.navigate(['sudoku', id]).then(nav => {

@@ -99,16 +99,23 @@ public class Cell {
 	 * @param value value to be set
 	 */
 	public void addValue(final int value) {
-		if (value == NO_VALUE) return;
+		if (value == NO_VALUE || value < 1 || value > 9) return;
 		this.values.add(value);
 	}
 
 	/**
-	 * adds a value to the cell
+	 * removes a value from the cell
 	 * 
-	 * @param value value to be set
+	 * @param value value to remove
 	 */
 	public void removeValue(final int value) {
 		this.values.remove(value);
+	}
+
+	/**
+	 * removes all values from cell
+	 */
+	public void deleteValues() {
+		this.values.clear();
 	}
 }

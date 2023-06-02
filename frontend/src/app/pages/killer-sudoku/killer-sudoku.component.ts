@@ -15,7 +15,6 @@ export class KillerSudokuComponent implements OnInit {
 
 	constructor(
 		private route: ActivatedRoute, 
-		private rxStompService: RxStompService, 
 		private sudoku: SudokuService,
 		private api: SudokuApiService
 	) { 
@@ -26,16 +25,5 @@ export class KillerSudokuComponent implements OnInit {
 		this.id = this.route.snapshot.paramMap.get('id')!;
 
 		this.api.applyCurrentState(this.id);
-
-		this.rxStompService.watch(`/session/broker/${this.id}`).subscribe(message => this.handleMessage(message));
-
-		this.rxStompService.publish({
-			destination: `/session/handler/${this.id}/hello`,
-			body: 'test message'
-		})
-	}
-
-	handleMessage(message: IMessage) {
-		console.debug(message.body);
 	}
 }
