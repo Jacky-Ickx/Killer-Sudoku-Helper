@@ -99,7 +99,7 @@ public class Cell {
 	 * @param value value to be set
 	 */
 	public void addValue(final int value) {
-		if (value == NO_VALUE) return;
+		if (value == NO_VALUE || value < 1 || value > 9) return;
 		this.values.add(value);
 	}
 

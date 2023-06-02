@@ -1,6 +1,8 @@
 package ksh.controllers;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Controller;
 
 import ksh.model.ActionMessage;
 import ksh.model.ErrorMessage;
+import ksh.model.Position;
 import ksh.services.KillerSudokuService;
 
 @Controller
@@ -45,6 +48,19 @@ public class SessionController {
 	@SendTo("/session/broker/{id}/actions")
 	public ActionMessage handleAction(@DestinationVariable final String id, final ActionMessage message) {
 		if (!this.logAndCheckID(id, "action", message)) return null;
+
+		final var sudoku = this.service.getGameById(id);
+
+		final var validList = new ArrayList<Position>(Arrays.asList(message.getCells()));
+		for (final var position : sudoku.getStartingGridPositions()) {
+			validList.remove(position);
+		}
+		message.setCells(validList.toArray(Position[]::new));
+
+		switch (message.getActionType()) {
+		default:
+			break;
+		}
 		return message;
 	}
 }
