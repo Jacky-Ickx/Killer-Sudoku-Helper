@@ -4,7 +4,7 @@ import { catchError } from 'rxjs/operators';
 import { Observable } from 'rxjs/internal/Observable';
 import { environment } from 'src/environments/environment';
 import { SudokuService } from '../sudoku/sudoku.service';
-import { of } from 'rxjs';
+import { of, Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { KillerSudoku } from 'src/app/models/killer-sudoku.model';
 import { IMessage } from '@stomp/rx-stomp';
@@ -15,10 +15,11 @@ import { RxStompService } from 'src/app/rx-stomp.service';
 })
 export class SudokuApiService {
 	private basePath = `${environment.protocol}://${environment.backend_url}`;
+	private currentSubscriptions: Subscription[] = [];
 
 	constructor(
-		private sudoku: SudokuService, 
-		private httpClient: HttpClient, 
+		private sudoku: SudokuService,
+		private httpClient: HttpClient,
 		private router: Router,
 		private rxStompService: RxStompService
 	) { }
@@ -90,9 +91,11 @@ export class SudokuApiService {
 			});
 		});
 
-		this.rxStompService.watch(`/session/broker/${id}`).subscribe(message => this.handlePlainMessage(message));
-		this.rxStompService.watch(`/session/broker/${id}/actions`).subscribe(message => this.handleActionsMessage(message));
-		this.rxStompService.watch(`/session/broker/${id}/error`).subscribe(message => this.handleErrorMessage(message));
+		this.currentSubscriptions.push(
+			this.rxStompService.watch(`/session/broker/${id}`).subscribe(message => this.handlePlainMessage(message)),
+			this.rxStompService.watch(`/session/broker/${id}/actions`).subscribe(message => this.handleActionsMessage(message)),
+			this.rxStompService.watch(`/session/broker/${id}/error`).subscribe(message => this.handleErrorMessage(message))
+		);
 
 		this.rxStompService.publish({
 			destination: `/session/handler/${id}/hello`,
@@ -111,6 +114,12 @@ export class SudokuApiService {
 
 	handleErrorMessage(message: IMessage) {
 		console.error(JSON.parse(message.body));
+	}
+
+	leaveCurrentSession() {
+		this.currentSubscriptions.forEach(subscription => {
+			subscription.unsubscribe();
+		});
 	}
 }
 
