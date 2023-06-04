@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { IMessage } from '@stomp/rx-stomp';
 import { SudokuApiService } from 'src/app/core/services/sudoku-api/sudoku-api.service';
 import { SudokuService } from 'src/app/core/services/sudoku/sudoku.service';
-import { RxStompService } from 'src/app/rx-stomp.service';
 
 @Component({
 	selector: 'app-killer-sudoku',
@@ -14,10 +12,10 @@ export class KillerSudokuComponent implements OnInit {
 	id!: string;
 
 	constructor(
-		private route: ActivatedRoute, 
+		private route: ActivatedRoute,
 		private sudoku: SudokuService,
 		private api: SudokuApiService
-	) { 
+	) {
 		this.sudoku.resetState();
 	}
 
