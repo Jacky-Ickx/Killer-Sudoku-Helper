@@ -91,6 +91,13 @@ export class SudokuApiService {
 			});
 		});
 
+		this.sudoku.finished.subscribe(_  => {
+			this.rxStompService.publish({
+				destination: `/session/handler/${id}/request`,
+				body: 'completion status'
+			});
+		});
+
 		this.currentSubscriptions.push(
 			this.rxStompService.watch(`/session/broker/${id}`).subscribe(message => this.handlePlainMessage(message)),
 			this.rxStompService.watch(`/session/broker/${id}/actions`).subscribe(message => this.handleActionsMessage(message)),
@@ -119,6 +126,13 @@ export class SudokuApiService {
 	leaveCurrentSession() {
 		this.currentSubscriptions.forEach(subscription => {
 			subscription.unsubscribe();
+		});
+	}
+
+	checkSolution(id: string) {
+		this.rxStompService.publish({
+			destination: `/session/handler/${id}/request`,
+			body: 'completion status'
 		});
 	}
 }

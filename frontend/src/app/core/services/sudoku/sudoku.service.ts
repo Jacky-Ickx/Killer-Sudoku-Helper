@@ -18,6 +18,7 @@ export class SudokuService {
 
 	public sendActions: boolean = false;
 	public actions = new Subject<ActionMessage>();
+	public finished = new Subject<void>();
 
 	possibleSums = [
 		[1, 9],
@@ -121,6 +122,7 @@ export class SudokuService {
 				value: 0
 			})
 		}
+		if (this.sendActions && !sendAction && addValue) this.checkFinished();
 	}
 
 	addValueToCell(cell: CellContent, value: number) {
@@ -173,6 +175,8 @@ export class SudokuService {
 		else this.highlightedCells.forEach(coordinates => {
 			this.grid[coordinates.y][coordinates.x].isPencilMark = setPencilmark!;
 		});
+
+		if (this.sendActions && !sendAction && !setPencilmark) this.checkFinished();
 	}
 
 	deleteHighlighted(sendAction: boolean = this.sendActions) {
@@ -305,5 +309,13 @@ export class SudokuService {
 		tempSave.forEach(cell => {
 			this.highlightCell(cell);
 		});
+	}
+
+	async checkFinished() {
+		if (this.grid.every(row => {
+			return row.every(cell => {
+				return cell.isPencilMark === false && cell.values.length === 1;
+			});
+		})) this.finished.next();
 	}
 }

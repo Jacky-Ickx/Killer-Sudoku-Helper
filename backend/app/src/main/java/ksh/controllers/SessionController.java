@@ -68,6 +68,29 @@ public class SessionController {
 	}
 
 	/**
+	 * message handler "requests" of client
+	 * 
+	 * @param id          id of KillerSudoku game (session)
+	 * @param requestType type of information requested by client
+	 * @return requested information to various destinations
+	 */
+	@MessageMapping("/{id}/request")
+	public void handleRequest(@DestinationVariable final String id, final String requestType) {
+		if (!this.logAndCheckID(id, "request", requestType)) return;
+
+		switch (requestType) {
+		case "completion status":
+			final var sudoku = this.service.getGameById(id);
+			if (sudoku.isSolved()) this.template.convertAndSend(MessageFormat.format("/session/broker/{0}", id), "Killer Sudoku has been solved");
+			else this.template.convertAndSend(MessageFormat.format("/session/broker/{0}/error", id), new ErrorMessage("completion status request", "Killer Sudoku is not solved"));
+			break;
+
+		default:
+			break;
+		}
+	}
+
+	/**
 	 * message handler for synchronizing game actions between clients and server
 	 * 
 	 * @param id     id of KillerSudoku game (session)
@@ -107,6 +130,7 @@ public class SessionController {
 		case "deleteValues":
 			sudoku.deleteValues(action.getCells());
 			break;
+
 		default:
 			break;
 		}

@@ -109,6 +109,40 @@ public class KillerSudoku {
 	}
 
 	/**
+	 * checks wether entire sudoku has been solved correctly.
+	 * 
+	 * if solvedGrid is set, checks against solved grid.
+	 * 
+	 * otherwise, checks if sums are reached and cells are unique for every default cage and killer sudoku cage
+	 * 
+	 * @return wether sudoku is solved correctly
+	 */
+	public boolean isSolved() {
+		if (this.solvedGrid != null) {
+			for (int y = 0; y < 9; y++) {
+				for (int x = 0; x < 9; x++) {
+					if (this.solvedGrid[y][x] != this.grid[y][x].getValue()) return false;
+				}
+			}
+			return true;
+		}
+
+		for (final var cage : this.cages) {
+			if (!(cage.cellsUnique(this.grid) && cage.sumReached(this.grid))) return false;
+		}
+		for (final var cage : Cage.rowCages) {
+			if (!(cage.cellsUnique(this.grid) && cage.sumReached(this.grid))) return false;
+		}
+		for (final var cage : Cage.columnCages) {
+			if (!(cage.cellsUnique(this.grid) && cage.sumReached(this.grid))) return false;
+		}
+		for (final var cage : Cage.nonetCages) {
+			if (!(cage.cellsUnique(this.grid) && cage.sumReached(this.grid))) return false;
+		}
+		return true;
+	}
+
+	/**
 	 * adds Value to selected cells
 	 * 
 	 * @param cells list of selected cells
