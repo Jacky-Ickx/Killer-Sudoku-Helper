@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  frontend:
+    image: killersudokuhelper/frontend:latest
+    restart: always
+    ports:
+      - 80:80
+  backend:
+    image: killersudokuhelper/backend:latest
+    restart: always
+    ports:
+      - 8080:8080
