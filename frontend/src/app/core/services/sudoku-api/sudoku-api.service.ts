@@ -64,7 +64,7 @@ export class SudokuApiService {
 				}
 
 				console.error(errorMsg);
-				if (error.status === 404) this.snackbar.open(`no game with id ${id} found`, 'dismiss');
+				if (error.status === 404) this.snackbar.open(`no game with id ${id} found`, 'dismiss', {panelClass: 'error'});
 
 				return of(null);
 			})
@@ -128,9 +128,9 @@ export class SudokuApiService {
 			source: string,
 			message: string,
 		} = JSON.parse(message.body);
-		
+
 		console.error(errorMessage);
-		this.snackbar.open(errorMessage.message, 'dismiss');
+		this.snackbar.open(errorMessage.message, 'dismiss', {panelClass: 'error'});
 	}
 
 	leaveCurrentSession() {

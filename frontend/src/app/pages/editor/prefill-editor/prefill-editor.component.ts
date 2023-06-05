@@ -40,7 +40,7 @@ export class PrefillEditorComponent {
 				}
 
 				console.error(errorMsg);
-				if(error.status === 400) this.snackbar.open('invalid grid', 'dismiss');
+				if(error.status === 400) this.snackbar.open('invalid grid', 'dismiss', {panelClass: 'error'});
 
 				return of([]);
 			})

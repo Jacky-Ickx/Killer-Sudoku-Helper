@@ -36,7 +36,7 @@ export class CageEditorComponent {
 			this.sumFormControl.reset();
 		}).catch((err: Error) => {
 			console.error(err);
-			this.snackbar.open(err.message, 'dismiss');
+			this.snackbar.open(err.message, 'dismiss', {panelClass: 'error'});
 		});
 	}
 }
