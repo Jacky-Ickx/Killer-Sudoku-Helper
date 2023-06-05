@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import { KillerSudoku } from 'src/app/models/killer-sudoku.model';
 import { IMessage } from '@stomp/rx-stomp';
 import { RxStompService } from '../rx-stomp/rx-stomp.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable({
 	providedIn: 'root'
@@ -21,7 +22,8 @@ export class SudokuApiService {
 		private sudoku: SudokuService,
 		private httpClient: HttpClient,
 		private router: Router,
-		private rxStompService: RxStompService
+		private rxStompService: RxStompService,
+		private snackbar: MatSnackBar
 	) { }
 
 	sendAsStartingGrid(): Observable<string> {
@@ -62,6 +64,7 @@ export class SudokuApiService {
 				}
 
 				console.error(errorMsg);
+				if (error.status === 404) this.snackbar.open(`no game with id ${id} found`, 'dismiss');
 
 				return of(null);
 			})
@@ -72,12 +75,13 @@ export class SudokuApiService {
 				}).catch(err => {
 					console.error(err);
 				});
+				return;
 			}
 
 			this.sudoku.applyState(sudoku!);
 
 			this.joinSession(id);
-		});;
+		});
 	}
 
 	joinSession(id: string) {
@@ -120,7 +124,13 @@ export class SudokuApiService {
 	}
 
 	handleErrorMessage(message: IMessage) {
-		console.error(JSON.parse(message.body));
+		const errorMessage: {
+			source: string,
+			message: string,
+		} = JSON.parse(message.body);
+		
+		console.error(errorMessage);
+		this.snackbar.open(errorMessage.message, 'dismiss');
 	}
 
 	leaveCurrentSession() {

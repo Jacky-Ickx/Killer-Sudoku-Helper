@@ -13,6 +13,7 @@ import { ImprintComponent } from './pages/imprint/imprint.component';
 import { SharedModule } from './shared/shared.module';
 import { HttpClientModule } from '@angular/common/http';
 import { RxStompService, rxStompServiceFactory } from './core/services/rx-stomp/rx-stomp.service';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
 	declarations: [
@@ -29,7 +30,8 @@ import { RxStompService, rxStompServiceFactory } from './core/services/rx-stomp/
 		BrowserAnimationsModule,
 		AppRoutingModule,
 		SharedModule,
-		HttpClientModule
+		HttpClientModule,
+		MatSnackBarModule
 	],
 	providers: [
 		{
