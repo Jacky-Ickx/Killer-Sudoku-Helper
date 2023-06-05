@@ -12,7 +12,7 @@ import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.com
 import { ImprintComponent } from './pages/imprint/imprint.component';
 import { SharedModule } from './shared/shared.module';
 import { HttpClientModule } from '@angular/common/http';
-import { RxStompService, rxStompServiceFactory } from './rx-stomp.service';
+import { RxStompService, rxStompServiceFactory } from './core/services/rx-stomp/rx-stomp.service';
 
 @NgModule({
 	declarations: [

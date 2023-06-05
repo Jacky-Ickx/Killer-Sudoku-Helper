@@ -8,7 +8,7 @@ import { of, Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { KillerSudoku } from 'src/app/models/killer-sudoku.model';
 import { IMessage } from '@stomp/rx-stomp';
-import { RxStompService } from 'src/app/rx-stomp.service';
+import { RxStompService } from '../rx-stomp/rx-stomp.service';
 
 @Injectable({
 	providedIn: 'root'
