@@ -116,6 +116,7 @@ export class SudokuApiService {
 
 	handlePlainMessage(message: IMessage) {
 		console.debug(message.body);
+		this.snackbar.open(message.body, 'dismiss');
 	}
 
 	handleActionsMessage(message: IMessage) {

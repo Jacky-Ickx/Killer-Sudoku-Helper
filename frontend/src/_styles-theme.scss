@@ -15,18 +15,20 @@
 	$warn-palette: map.get($color-config, 'warn');
 
     .mat-mdc-snack-bar-container {
-		$background: mat.get-color-from-palette($accent-palette, 500);
-		$foreground: mat.get-color-from-palette(map.get($accent-palette, contrast), 500);
-		//Added with panelClass property
-		&.error {
-			$background: mat.get-color-from-palette($warn-palette, 500);
-			$foreground: mat.get-color-from-palette(map.get($warn-palette, contrast), 500);
+		.mdc-snackbar__surface {
+			background-color: mat.get-color-from-palette($accent-palette, 500) !important;
+			.mdc-snackbar__label, .mdc-button__label {
+				color: mat.get-color-from-palette(map.get($accent-palette, contrast), 500) !important;
+			}
 		}
 
-		.mdc-snackbar__surface {
-			background-color: $background !important;
-			.mdc-snackbar__label, .mdc-button__label {
-				color: $foreground !important;
+		//Added with panelClass property
+		&.error {
+			.mdc-snackbar__surface {
+				background-color: mat.get-color-from-palette($warn-palette, 500) !important;
+				.mdc-snackbar__label, .mdc-button__label {
+					color: mat.get-color-from-palette(map.get($warn-palette, contrast), 500) !important;
+				}
 			}
 		}
 	}
