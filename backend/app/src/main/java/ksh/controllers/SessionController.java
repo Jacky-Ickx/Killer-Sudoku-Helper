@@ -64,7 +64,7 @@ public class SessionController {
 	@SendTo("/session/broker/{id}")
 	public String hello(@DestinationVariable final String id, final String message) {
 		if (!this.logAndCheckID(id, "hello", message)) return null;
-		return MessageFormat.format("Hello there, you have joined the session with id {0}", id);
+		return "a new client connected";
 	}
 
 	/**
