@@ -4,6 +4,7 @@ import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { Router } from '@angular/router';
 import { SudokuApiService } from '../../../core/services/sudoku-api/sudoku-api.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
 	selector: 'app-prefill-editor',
@@ -13,7 +14,12 @@ import { SudokuApiService } from '../../../core/services/sudoku-api/sudoku-api.s
 export class PrefillEditorComponent {
 	startingGame: boolean = false;
 
-	constructor(private sudoku: SudokuService, private api: SudokuApiService, private router: Router) {
+	constructor(
+		private sudoku: SudokuService, 
+		private api: SudokuApiService, 
+		private router: Router,
+		private snackbar: MatSnackBar
+	) {
 		this.sudoku.inputMethod = 'prefill';
 		this.sudoku.removeHighlights();
 		this.sudoku.enableInput();
@@ -34,6 +40,7 @@ export class PrefillEditorComponent {
 				}
 
 				console.error(errorMsg);
+				if(error.status === 400) this.snackbar.open('invalid grid', 'dismiss', {panelClass: 'error'});
 
 				return of([]);
 			})
