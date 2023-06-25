@@ -17,6 +17,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class SudokuApiService {
 	private basePath = `${environment.protocol}://${environment.backend_url}`;
 	private currentSubscriptions: Subscription[] = [];
+	private currentID: string = '';
 
 	constructor(
 		private sudoku: SudokuService,
@@ -85,7 +86,9 @@ export class SudokuApiService {
 	}
 
 	joinSession(id: string) {
+		this.currentID = id;
 		this.sudoku.sendActions = true;
+
 		this.sudoku.actions.subscribe((action) => {
 			console.log(action);
 
@@ -105,6 +108,7 @@ export class SudokuApiService {
 		this.currentSubscriptions.push(
 			this.rxStompService.watch(`/session/broker/${id}`).subscribe(message => this.handlePlainMessage(message)),
 			this.rxStompService.watch(`/session/broker/${id}/actions`).subscribe(message => this.handleActionsMessage(message)),
+			this.rxStompService.watch(`/session/broker/${id}/hint`).subscribe(message => this.handleHintMessage(message)),
 			this.rxStompService.watch(`/session/broker/${id}/error`).subscribe(message => this.handleErrorMessage(message))
 		);
 
@@ -124,6 +128,10 @@ export class SudokuApiService {
 		this.sudoku.applyAction(JSON.parse(message.body));
 	}
 
+	handleHintMessage(message: IMessage) {
+		console.debug(JSON.parse(message.body));
+	}
+
 	handleErrorMessage(message: IMessage) {
 		const errorMessage: {
 			source: string,
@@ -138,12 +146,21 @@ export class SudokuApiService {
 		this.currentSubscriptions.forEach(subscription => {
 			subscription.unsubscribe();
 		});
+
+		this.currentID = '';
 	}
 
-	checkSolution(id: string) {
+	checkSolution() { // currently unused -> for 'check solution button'
 		this.rxStompService.publish({
-			destination: `/session/handler/${id}/request`,
+			destination: `/session/handler/${this.currentID}/request`,
 			body: 'completion status'
+		});
+	}
+
+	requestHint() {
+		this.rxStompService.publish({
+			destination: `/session/handler/${this.currentID}/request`,
+			body: 'hint'
 		});
 	}
 }
