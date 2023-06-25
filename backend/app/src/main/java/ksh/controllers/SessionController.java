@@ -85,6 +85,10 @@ public class SessionController {
 			else this.template.convertAndSend(MessageFormat.format("/session/broker/{0}/error", id), new ErrorMessage("completion status request", "Killer Sudoku is not solved"));
 			break;
 
+		case "hint":
+			this.template.convertAndSend(MessageFormat.format("/session/broker/{0}/hint", id), new ErrorMessage("hint request", "not ipmlemented"));
+			break;
+
 		default:
 			break;
 		}
