@@ -17,6 +17,7 @@ import ksh.model.ActionMessage;
 import ksh.model.ErrorMessage;
 import ksh.model.Position;
 import ksh.services.KillerSudokuService;
+import ksh.solver.Solver;
 
 /**
  * WebSocket (Stomp) Controller for game sessions
@@ -86,7 +87,9 @@ public class SessionController {
 			break;
 
 		case "hint":
-			this.template.convertAndSend(MessageFormat.format("/session/broker/{0}/hint", id), new ErrorMessage("hint request", "not ipmlemented"));
+			final var hint = Solver.getNextStep(this.service.getGameById(id));
+			if (hint != null) this.template.convertAndSend(MessageFormat.format("/session/broker/{0}/hint", id), hint);
+			else this.template.convertAndSend(MessageFormat.format("/session/broker/{0}/error", id), new ErrorMessage("hint request", "could not generate hint"));
 			break;
 
 		default:
