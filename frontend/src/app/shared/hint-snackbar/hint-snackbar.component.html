@@ -2,3 +2,4 @@
 <button mat-button color="warn" *ngIf="specificity == 0" (click)="showRegion()">show region</button>
 <button mat-button color="warn" *ngIf="specificity == 1" (click)="showCells()">show cell{{hint.cells.length >= 2? 's': ''}}</button>
 <button mat-button color="warn" *ngIf="specificity == 2" (click)="applySolution()">apply solution</button>
+<button mat-button color="warn"  (click)="dismiss()">dismiss</button>

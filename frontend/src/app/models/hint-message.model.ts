@@ -8,7 +8,7 @@ export interface HintMessage {
 	nonet: number | null,
 	cells: Coordinates[],
 	effect: {
-		type: string,
+		type: 'set' | 'eliminate',
 		values: number | number[] | number[][]
 	}
 }

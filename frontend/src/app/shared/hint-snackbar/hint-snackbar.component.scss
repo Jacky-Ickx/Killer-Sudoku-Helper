@@ -5,3 +5,7 @@
 	align-items: center;
 	gap: 1em;
 }
+
+button[mat-button] {
+	margin: -8px 0;
+}
