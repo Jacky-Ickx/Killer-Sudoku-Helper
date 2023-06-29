@@ -6,25 +6,23 @@ import ksh.model.KillerSudoku;
 import ksh.model.Position;
 
 public class Solver {
-    private final KillerSudoku sudoku;
 
-    public Solver(final KillerSudoku sudoku) {
-        this.sudoku = sudoku;
-    }
+	public Solver() {
+	}
 
-    public Step getNextStep() {
-        // TODO: Error Detection
-        try {
-            final var errors = new ArrayList<Position>();
+	public static Step getNextStep(final KillerSudoku sudoku) {
+		// TODO: Error Detection
+		try {
+			final var errors = new ArrayList<Position>();
 
-            for (int y = 0; y < 9; y++) {
-                for (int x = 0; x < 9; x++) {
-                    if (this.sudoku.checkCell(x, y) == false) errors.add(new Position(x, y));
-                }
-            }
+			for (int y = 0; y < 9; y++) {
+				for (int x = 0; x < 9; x++) {
+					if (sudoku.checkCell(x, y) == false) errors.add(new Position(x, y));
+				}
+			}
 
-            if (!errors.isEmpty()) {
-                // @formatter:off
+			if (!errors.isEmpty()) {
+				// @formatter:off
                 return new Step("Error Detection",
                                 true,
                                 null,
@@ -34,19 +32,19 @@ public class Solver {
                                 null
                 );
                 // @formatter:on
-            }
-        }
-        catch (final IllegalStateException e) {
-            // TODO: what to do in this spot?
-        }
+			}
+		}
+		catch (final IllegalStateException e) {
+			// TODO: what to do in this spot?
+		}
 
-        final var strats = Strategies.STRATEGIES; // make following code more readable
+		final var strats = Strategies.STRATEGIES;
 
-        // choose strategy
-        final Strategy strategy = strats.get(Level.BRUTEFORCE)[0];
-        // apply strategy
-        final Step step = strategy.apply(this.sudoku.getCages(), this.sudoku.getGrid());
-        // evaluate and return step
-        return step;
-    }
+		// choose strategy
+		final Strategy strategy = strats.get(Level.EASY)[0];
+		// apply strategy
+		final Step step = strategy.apply(sudoku.getCages(), sudoku.getGrid());
+		// evaluate and return step
+		return step;
+	}
 }
