@@ -10,6 +10,8 @@ import { KillerSudoku } from 'src/app/models/killer-sudoku.model';
 import { IMessage } from '@stomp/rx-stomp';
 import { RxStompService } from '../rx-stomp/rx-stomp.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { HintMessage } from '../../../models/hint-message.model';
+import { HintSnackbarComponent } from '../../../shared/hint-snackbar/hint-snackbar.component';
 
 @Injectable({
 	providedIn: 'root'
@@ -120,7 +122,9 @@ export class SudokuApiService {
 
 	handlePlainMessage(message: IMessage) {
 		console.debug(message.body);
-		this.snackbar.open(message.body, 'dismiss');
+		this.snackbar.open(message.body, 'dismiss', {
+			duration: 5000
+		});
 	}
 
 	handleActionsMessage(message: IMessage) {
@@ -129,6 +133,10 @@ export class SudokuApiService {
 	}
 
 	handleHintMessage(message: IMessage) {
+		let hint = JSON.parse(message.body) as HintMessage
+		this.snackbar.openFromComponent(HintSnackbarComponent, {
+			data: hint
+		});
 		console.debug(JSON.parse(message.body));
 	}
 

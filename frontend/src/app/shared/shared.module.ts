@@ -10,6 +10,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { KeypadComponent } from './keypad/keypad.component';
 import { MatButtonModule } from '@angular/material/button';
+import { HintSnackbarComponent } from './hint-snackbar/hint-snackbar.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { MatButtonModule } from '@angular/material/button';
     DividerComponent,
     CellComponent,
     GridComponent,
-    KeypadComponent
+    KeypadComponent,
+    HintSnackbarComponent
   ],
   imports: [
     CommonModule,

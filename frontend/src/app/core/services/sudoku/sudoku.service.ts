@@ -44,6 +44,10 @@ export class SudokuService {
 					values: [],
 					isPencilMark: false,
 					highlighted: false,
+					hintHighlight: {
+						region: false,
+						affected: false,
+					},
 					cage: {
 						inCage: false,
 						sum: 0,
@@ -317,5 +321,57 @@ export class SudokuService {
 				return cell.isPencilMark === false && cell.values.length === 1;
 			});
 		})) this.finished.next();
+	}
+
+	highlightHintRegion(row: number | null, column: number | null, nonet: number | null) {
+		if (row !== null) {
+			this.grid[row].forEach(cell => {
+				cell.hintHighlight.region = true;
+			})
+		}
+
+		if (column !== null) {
+			this.grid.forEach(row => {
+				row[column].hintHighlight.region = true;
+			})
+		}
+
+		if (nonet !== null) {
+			let y = 3 * Math.floor(nonet / 3);
+			let x = 3 * (nonet % 3);
+			for(let i = 0; i < 9; i++) {
+				this.grid[y + Math.floor(i / 3)][x + (i % 3)].hintHighlight.region = true;
+			}
+		}
+	}
+
+	highlightHintAffected(cells: Coordinates[]) {
+		cells.forEach(cell => {
+			this.grid[cell.y][cell.x].hintHighlight.affected = true;
+		})
+	}
+
+	applyHintValue(cells: Coordinates[], value: number, set: boolean) {
+		const tempSave = this.highlightedCells;
+		this.removeHighlights();
+		cells.forEach(cell => {
+			this.highlightCell(cell);
+		});
+
+		this.toggleValue(value, this.sendActions, set);
+
+		this.removeHighlights();
+		tempSave.forEach(cell => {
+			this.highlightCell(cell);
+		});
+	}
+
+	removeHintHighlights() {
+		this.grid.forEach(row => {
+			row.forEach(cell => {
+				cell.hintHighlight.affected = false;
+				cell.hintHighlight.region = false;
+			});
+		});
 	}
 }

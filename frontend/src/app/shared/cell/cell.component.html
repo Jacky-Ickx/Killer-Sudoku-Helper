@@ -1,6 +1,8 @@
 <div class="cell" style="position: relative;"
 [ngClass]="{
     'highlighted': content.highlighted, 
+    'hint-region': content.hintHighlight.region, 
+    'hint-affected': content.hintHighlight.affected, 
     'cell-value': (content.values.length === 1 && !content.isPencilMark),
     'cell-pencil-marks': !(content.values.length === 1 && !content.isPencilMark),
     'in-cage': content.cage.inCage
@@ -16,7 +18,11 @@
     [ngClass]="{
         'no-bottom': content.cage.top
     }">
-        <span class="sum" [ngClass]="{'highlighted': content.highlighted}" *ngIf="content.cage.sum > 0 && content.cage.inCage">{{content.cage.sum}}</span>
+        <span class="sum" [ngClass]="{
+			'highlighted': content.highlighted, 
+			'hint-region': content.hintHighlight.region, 
+			'hint-affected': content.hintHighlight.affected
+		}" *ngIf="content.cage.sum > 0 && content.cage.inCage">{{content.cage.sum}}</span>
     </div>
 
     <div class="no-top no-right"

@@ -1,0 +1,11 @@
+:host {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	gap: 1em;
+}
+
+button[mat-button] {
+	margin: -8px 0;
+}

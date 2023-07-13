@@ -2,6 +2,10 @@ export interface CellContent {
     values: number[],
     isPencilMark: boolean,
     highlighted: boolean,
+	hintHighlight: {
+		region: boolean,
+		affected: boolean,
+	}
     cage: {
         inCage: boolean, // needed for editor
         sum: number, // 0 if this cell doesn't display the cage-sum
