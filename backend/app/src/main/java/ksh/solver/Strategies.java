@@ -100,18 +100,20 @@ public final class Strategies {
 						itr.remove();
 					}
 				}
-				if (cellList.size() == 1) {
-					// @formatter:off
-                    return new Step("Rule of 45", 
-                                    false,
-                                    i, 
-                                    null, 
-                                    null, 
-                                    cellList.toArray(new Position[0]), 
-                                    new Effect("set", remainingSum)
-                    );
-                    // @formatter:on
-				}
+				rows[i].setAt0(remainingSum);
+			}
+
+			if (rows[i].getValue1().size() == 1) {
+				// @formatter:off
+				return new Step("Rule of 45", 
+								false,
+								i, 
+								null, 
+								null, 
+								rows[i].getValue1().toArray(new Position[0]), 
+								new Effect("set", rows[i].getValue0())
+				);
+				// @formatter:on
 			}
 
 			if (columns[i].getValue1().size() > 0) {
@@ -129,18 +131,21 @@ public final class Strategies {
 						itr.remove();
 					}
 				}
-				if (cellList.size() == 1) {
-					// @formatter:off
-                    return new Step("Rule of 45", 
-                                    false,
-                                    null, 
-                                    i, 
-                                    null, 
-                                    cellList.toArray(new Position[0]), 
-                                    new Effect("set", remainingSum)
-                    );
-                    // @formatter:on
-				}
+
+				columns[i].setAt0(remainingSum);
+			}
+
+			if (columns[i].getValue1().size() == 1) {
+				// @formatter:off
+				return new Step("Rule of 45", 
+								false,
+								null, 
+								i, 
+								null, 
+								columns[i].getValue1().toArray(new Position[0]), 
+								new Effect("set", columns[i].getValue0())
+				);
+				// @formatter:on
 			}
 
 			if (nonets[i].getValue1().size() > 0) {
@@ -158,18 +163,20 @@ public final class Strategies {
 						itr.remove();
 					}
 				}
-				if (cellList.size() == 1) {
-					// @formatter:off
-                    return new Step("Rule of 45", 
-                                    false,
-                                    null, 
-                                    null, 
-                                    i, 
-                                    cellList.toArray(new Position[0]), 
-                                    new Effect("set", remainingSum)
-                    );
-                    // @formatter:on
-				}
+				nonets[i].setAt0(remainingSum);
+			}
+
+			if (nonets[i].getValue1().size() == 1) {
+				// @formatter:off
+				return new Step("Rule of 45", 
+								false,
+								null, 
+								null, 
+								i, 
+								nonets[i].getValue1().toArray(new Position[0]), 
+								new Effect("set", nonets[i].getValue0())
+				);
+				// @formatter:on
 			}
 		}
 		return null;
